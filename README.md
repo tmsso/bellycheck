@@ -2,7 +2,7 @@
 
 Will your car scrape on the garage ramp? Belly Check rolls a to-scale car up (or down) your ramp and shows exactly where it gets tight.
 
-**Live:** https://tmsso.github.io/bellycheck/
+**Live:** https://bellycheck.tmsso.com
 
 ## What it checks
 
