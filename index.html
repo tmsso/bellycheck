@@ -192,6 +192,33 @@ details.measure ol { margin: 8px 0 0; padding-left: 20px; display: flex; flex-di
 .pv-note .sw { width: 18px; border-top: 2px dashed var(--preview); flex: none; }
 .pv-note b { font-family: var(--font-data); font-weight: 600; color: var(--preview); }
 footer { font-size: 12px; color: var(--muted); max-width: 100ch; }
+.band { background: var(--panel); border-bottom: 1px solid var(--rule); }
+.band-inner { max-width: 1400px; margin: 0 auto; padding-block: 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.theme-btn { min-height: 34px; width: 38px; display: inline-flex; align-items: center; justify-content: center; color: var(--muted); }
+.theme-btn .ti { display: none; }
+.theme-btn[data-mode="auto"] .ti-auto, .theme-btn[data-mode="light"] .ti-light, .theme-btn[data-mode="dark"] .ti-dark { display: inline; }
+.chart-block { border-top: 1px solid var(--rule); padding-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.panel.inputs { background: transparent; border: 0; gap: 10px; }
+.panel.inputs .step { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; }
+.panel.inputs #applybar { border: 1px solid var(--rule); border-radius: 10px; }
+.more-dims { border-top: 1px solid var(--rule); padding-top: 10px; }
+.more-dims > summary { cursor: pointer; font-weight: 600; font-size: 13px; color: var(--accent); min-height: 32px; display: flex; align-items: center; }
+.more-body { display: flex; flex-direction: column; gap: 14px; padding-top: 10px; }
+.mini-h { margin: 0; font-size: 13px; font-weight: 600; }
+.measure-list { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
+.ramp-ed { display: flex; flex-direction: column; gap: 6px; }
+.seg .n { width: auto; height: auto; background: none; color: var(--muted); border-radius: 0; font: 500 12px var(--font-data); }
+#ramp-svg { width: 100%; height: auto; display: block; background: var(--inset); border-radius: 8px; touch-action: none; user-select: none; }
+#ramp-svg .re-ground { fill: var(--ground); }
+#ramp-svg .re-line { fill: none; stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: round; }
+#ramp-svg .re-lbl { fill: var(--muted); font: 500 11px var(--font-data); }
+#ramp-svg .re-seg { fill: var(--ink); }
+#ramp-svg .re-hit { fill: transparent; }
+#ramp-svg .re-g { cursor: grab; outline: none; }
+#ramp-svg .re-h { fill: var(--panel); stroke: var(--accent); stroke-width: 2.5; }
+#ramp-svg .re-g:hover .re-h, #ramp-svg .re-g:focus-visible .re-h { stroke-width: 4; r: 8.5; }
+.panel.about { background: transparent; border: 0; padding: 0; }
+.about-body > div { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
 .brand { text-decoration: none; color: var(--ink); }
 .brand .logo { flex: none; }
 .brand .wordmark { font-family: var(--font-display); font-weight: 700; font-size: 23px; letter-spacing: .01em; }
@@ -254,7 +281,7 @@ footer { font-size: 12px; color: var(--muted); max-width: 100ch; }
 @media (max-width: 759px) { .wrap { padding-bottom: 104px; } .res-head { font-size: 23px; } }
 @media (max-width: 1059px) {
   .layout .col { display: contents; }
-  .side-panel { order: 1; } .panel.inputs { order: 2; } .layout .sub2 { order: 3; }
+  .side-panel { order: 1; } .panel.inputs { order: 2; } .plan-panel { order: 3; }
 }
 .about-body { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px 24px; font-size: 13px; }
 .about-body h3 { font-family: var(--font-display); font-size: 15px; font-weight: 600; margin: 0 0 4px; }
@@ -274,9 +301,8 @@ footer { font-size: 12px; color: var(--muted); max-width: 100ch; }
 </head>
 <body>
 
-<noscript><p style="padding:16px">Belly Check needs JavaScript to run the simulation.</p></noscript>
-<div class="wrap">
-  <header class="topbar">
+<div class="band">
+  <header class="topbar band-inner">
     <a class="brand" href="#top" aria-label="Belly Check">
       <svg class="logo" width="40" height="40" viewBox="0 0 48 48" aria-hidden="true"><defs><clipPath id="lgTile"><rect x="1" y="1" width="46" height="46" rx="11"/></clipPath></defs><rect x="1" y="1" width="46" height="46" rx="11" fill="#1F5FB8"/><path d="M0 42.75 L21 30.5 H48 V48 H0 Z" fill="#A9C8F2" clip-path="url(#lgTile)"/><path d="M0 42.75 L21 30.5 H48" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linejoin="round" clip-path="url(#lgTile)"/><path d="M17.89 32.31 L21 30.5 L25 30.5 Z" fill="#E5372B" stroke="#E5372B" stroke-width="1.8" stroke-linejoin="round"/><g transform="translate(13.4 34.94) rotate(-11.63) translate(-7.7 -0.9)"><path d="M0 -4.32 V-13.2 L4.95 -19.44 H23.1 L30.25 -13.92 L37.4 -12.48 V-4.32 Z" fill="#FFFFFF"/><path d="M6.82 -13.68 L9.57 -17.28 H21.78 L26.62 -13.68 Z" fill="#1F5FB8"/><circle cx="7.7" cy="-4.6" r="4.6" fill="#1F5FB8" stroke="#FFFFFF" stroke-width="1.7"/><circle cx="29.7" cy="-4.6" r="4.6" fill="#1F5FB8" stroke="#FFFFFF" stroke-width="1.7"/></g></svg>
       <span class="wordmark">Belly Check</span>
@@ -287,16 +313,15 @@ footer { font-size: 12px; color: var(--muted); max-width: 100ch; }
         <button id="lang-hu" aria-pressed="false">HU</button>
       </div>
       <div class="seg-ctl" role="group" aria-label="Units">
-        <button id="u-metric" aria-pressed="true" data-i="unitsMetric">Metric</button>
-        <button id="u-imperial" aria-pressed="false" data-i="unitsImperial">Imperial</button>
+        <button id="u-metric" aria-pressed="true" data-i="unitsMetric">cm</button>
+        <button id="u-imperial" aria-pressed="false" data-i="unitsImperial">in</button>
       </div>
-      <div class="seg-ctl" role="group" aria-label="Theme">
-        <button id="th-auto" aria-pressed="true" data-i="thAuto">Auto</button>
-        <button id="th-light" aria-pressed="false" data-i="thLight">Light</button>
-        <button id="th-dark" aria-pressed="false" data-i="thDark">Dark</button>
-      </div>
+      <button type="button" class="btn icon theme-btn" id="theme-btn" aria-label="Theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g class="ti ti-auto"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></g><g class="ti ti-light"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></g><g class="ti ti-dark"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></g></svg></button>
     </div>
   </header>
+</div>
+<noscript><p style="padding:16px">Belly Check needs JavaScript to run the simulation.</p></noscript>
+<div class="wrap">
 
   <section class="hero" id="top">
     <div class="hero-text">
@@ -362,10 +387,7 @@ footer { font-size: 12px; color: var(--muted); max-width: 100ch; }
         <div class="readout" id="readout"></div>
         <div class="pv-note" id="preview-note" hidden></div>
         <div class="msg" id="contact-msg" hidden></div>
-      </section>
-
-      <div class="sub2">
-        <section class="panel">
+        <div class="chart-block">
           <div class="ph"><h2 data-i="chartT">Clearance along the way</h2></div>
           <div class="legend">
             <span style="--sw: var(--accent)" data-i="zBelly">Underbody</span>
@@ -376,13 +398,14 @@ footer { font-size: 12px; color: var(--muted); max-width: 100ch; }
           </div>
           <canvas id="chart"></canvas>
           <p class="hint" data-i="chartHint">Tap or drag on the chart to move the car.</p>
-        </section>
-        <section class="panel">
-          <div class="ph"><h2 data-i="planT">Plan view</h2><span class="hint mono" id="plan-hint"></span></div>
-          <canvas id="plan"></canvas>
-          <div class="width-out" id="width-out"></div>
-        </section>
-      </div>
+        </div>
+      </section>
+
+      <section class="panel plan-panel">
+        <div class="ph"><h2 data-i="planT">Plan view</h2><span class="hint mono" id="plan-hint"></span></div>
+        <canvas id="plan"></canvas>
+        <div class="width-out" id="width-out"></div>
+      </section>
     </div>
 
     <section class="panel inputs" aria-label="Your car and ramp">
@@ -404,14 +427,18 @@ footer { font-size: 12px; color: var(--muted); max-width: 100ch; }
         </div>
         <div class="source" id="car-source"></div>
         <div class="fields" id="car-fields"></div>
+        <details class="more-dims" id="more-dims">
+          <summary data-i="moreDims">All 10 dimensions and how to measure them</summary>
+          <div class="more-body">
+        <div class="fields" id="car-fields-more"></div>
         <div class="field" style="max-width: 320px;">
           <span data-i="tyreL">Tyre size from the sidewall</span>
           <div class="row"><input type="text" id="tyre-size" placeholder="205/55 R16" style="flex:1"><button class="btn small" id="tyre-apply" data-i="use">Use</button></div>
         </div>
         <div class="derived" id="car-derived"></div>
-        <details class="measure">
-          <summary data-i="measureT">Measuring it yourself with a tape</summary>
-          <ol id="measure-list"></ol>
+        <h3 class="mini-h" data-i="measureT">Measuring it yourself with a tape</h3>
+        <ol id="measure-list" class="measure-list"></ol>
+          </div>
         </details>
       </div>
       </div>
@@ -427,6 +454,10 @@ footer { font-size: 12px; color: var(--muted); max-width: 100ch; }
           </div>
         </div>
         <p class="hint" data-i="segHint">List the pieces from the street to the garage floor. Each piece needs a length and one of: rise, angle or grade. A negative value means the garage is lower than the street.</p>
+        <div class="ramp-ed">
+          <svg id="ramp-svg" viewBox="0 0 600 200" role="group" aria-label="Ramp profile editor"></svg>
+          <p class="hint" data-i="rampEdHint">Drag a corner to reshape the ramp, or select one and use the arrow keys. The table below updates as you go.</p>
+        </div>
         <div class="seg-head"><span></span><span data-i="hLen">Length m</span><span data-i="hAs">Given as</span><span data-i="hVal">Value</span><span></span></div>
         <div class="endcap" data-i="street">Street, flat</div>
         <div class="segs" id="segs"></div>
@@ -732,19 +763,20 @@ const T = {
 
     thAuto: 'Auto', thLight: 'Light', thDark: 'Dark',
     side: 'Side elevation', zWhole: 'Whole ramp', zCar: 'Car', zClose: 'Close-up', vx2: '2× height',
-    play: 'Play', pause: 'Pause', replay: 'Replay', sp1: 'Creep', sp2: 'Slow', sp3: 'Walking', unitsMetric: 'Metric', unitsImperial: 'Imperial',
+    play: 'Roll it in', pause: 'Pause', replay: 'Replay', sp1: 'Creep', sp2: 'Slow', sp3: 'Walking', unitsMetric: 'cm', unitsImperial: 'in', themeAuto: 'Theme: follows your device', themeLight: 'Theme: light', themeDark: 'Theme: dark',
     dirFwd: 'Forwards', dirRev: 'Reversing', stopContact: 'Stop at contact', toWorst: 'Jump to tightest',
     chartT: 'Clearance along the way', chartHint: 'Tap or drag on the chart to move the car.',
     zBelly: 'Underbody', zFront: 'Front bumper', zRear: 'Rear bumper', marginL: 'Safety margin',
     planT: 'Plan view', tCar: 'Your car', tSlope: 'Your ramp', tWidth: 'Door and width',
     lookupL: 'Look up a car', lookupPh: 'e.g. 2021 Škoda Octavia Combi', lookupGo: 'Look up', stop: 'Stop',
     presetL: 'Or start from a preset', presetPick: 'Choose a preset…',
-    tyreL: 'Tyre size from the sidewall', use: 'Use', measureT: 'Measuring it yourself with a tape',
+    moreDims: 'All 10 dimensions and how to measure them', tyreL: 'Tyre size from the sidewall', use: 'Use', measureT: 'Measuring it yourself with a tape',
     undo: 'Undo', apply: 'Update result',
     measuredL: 'Lengths are measured', mSurface: 'Along the surface', mHoriz: 'Horizontally',
     segHint: 'List the pieces from the street to the garage floor. Each piece needs a length and one of: rise, angle or grade. A negative value means the garage is lower than the street.',
     hLen: u => 'Length ' + u, hAs: 'Given as', hVal: 'Value', street: 'Street, flat', garage: 'Garage floor, flat',
     addSeg: 'Add piece', addBottom: 'Add easing at bottom', addTop: 'Add easing at top',
+    rampEdHint: 'Drag a corner to reshape the ramp, or select one and use the arrow keys. The table below updates as you go.', reStreet: 'Street', reGarage: 'Garage', reHeight: n => `height ×${n}`, reCorner: n => `Corner ${n}`,
     shapeL: 'Start from a shape', shSimple: 'Single ramp', shEased: 'Eased both ends', shDown: 'Down into basement',
     doorAtL: 'Door position', dTop: 'Top of ramp', dBottom: 'Bottom of ramp', dCustom: 'Custom', doorXL: 'Distance from the street end',
     aboutT: 'How Belly Check works',
@@ -826,19 +858,20 @@ const T = {
 
     thAuto: 'Auto', thLight: 'Világos', thDark: 'Sötét',
     side: 'Oldalnézet', zWhole: 'Teljes rámpa', zCar: 'Autó', zClose: 'Közeli', vx2: '2× magasság',
-    play: 'Indít', pause: 'Szünet', replay: 'Újra', sp1: 'Araszolás', sp2: 'Lassú', sp3: 'Lépésben', unitsMetric: 'Metrikus', unitsImperial: 'Angolszász',
+    play: 'Gurítsd be', pause: 'Szünet', replay: 'Újra', sp1: 'Araszolás', sp2: 'Lassú', sp3: 'Lépésben', unitsMetric: 'cm', unitsImperial: 'in', themeAuto: 'Téma: a készülék szerint', themeLight: 'Téma: világos', themeDark: 'Téma: sötét',
     dirFwd: 'Előre', dirRev: 'Tolatva', stopContact: 'Megáll érintkezéskor', toWorst: 'Ugrás a legszorosabbra',
     chartT: 'Szabad távolság az út mentén', chartHint: 'Koppints vagy húzd az ujjad a grafikonon az autó mozgatásához.',
     zBelly: 'Alváz', zFront: 'Első lökhárító', zRear: 'Hátsó lökhárító', marginL: 'Biztonsági ráhagyás',
     planT: 'Felülnézet', tCar: 'Az autód', tSlope: 'A rámpád', tWidth: 'Kapu és szélesség',
     lookupL: 'Autó keresése', lookupPh: 'pl. 2021 Škoda Octavia Combi', lookupGo: 'Keresés', stop: 'Leállít',
     presetL: 'Vagy indulj egy mintából', presetPick: 'Válassz mintát…',
-    tyreL: 'Gumiméret az oldalfalról', use: 'Beír', measureT: 'Saját mérés mérőszalaggal',
+    moreDims: 'Mind a 10 méret és a mérés módja', tyreL: 'Gumiméret az oldalfalról', use: 'Beír', measureT: 'Saját mérés mérőszalaggal',
     undo: 'Visszavon', apply: 'Eredmény frissítése',
     measuredL: 'A hosszakat így mérted', mSurface: 'A felület mentén', mHoriz: 'Vízszintesen',
     segHint: 'Sorold fel a szakaszokat az utcától a garázspadlóig. Mindegyikhez kell egy hossz és egy érték: emelkedés, szög vagy meredekség. Negatív érték: a garázs lejjebb van az utcánál.',
     hLen: u => 'Hossz ' + u, hAs: 'Megadás', hVal: 'Érték', street: 'Utca, sík', garage: 'Garázspadló, sík',
     addSeg: 'Új szakasz', addBottom: 'Átmenet alul', addTop: 'Átmenet felül',
+    rampEdHint: 'Húzd a töréspontokat a rámpa alakításához, vagy jelölj ki egyet és használd a nyílbillentyűket. A táblázat közben frissül.', reStreet: 'Utca', reGarage: 'Garázs', reHeight: n => `magasság ×${n}`, reCorner: n => `${n}. töréspont`,
     shapeL: 'Kiinduló forma', shSimple: 'Egyszerű rámpa', shEased: 'Átmenetekkel', shDown: 'Le a mélygarázsba',
     doorAtL: 'A kapu helye', dTop: 'Rámpa teteje', dBottom: 'Rámpa alja', dCustom: 'Egyedi', doorXL: 'Távolság az utcai végtől',
     aboutT: 'Hogyan működik a Belly Check',
@@ -1237,6 +1270,11 @@ function drawSide(col) {
     ctx.strokeStyle = col.ink; ctx.lineWidth = 1.5; ctx.strokeRect(hx - 6, -2, 18, Math.max(0, hy) + 2);
     ctx.fillStyle = col.muted; ctx.textAlign = 'left'; ctx.fillText(t('headerLbl'), hx + 16, Math.max(14, hy - 4));
   }
+  e.pts.forEach(([x, y, c], i) => {
+    if (i % 5 && c >= margin) return;
+    ctx.strokeStyle = c < 0 ? col.stop : c < margin ? col.warn : col.rule; ctx.lineWidth = c < margin ? 2 : 1;
+    ctx.beginPath(); ctx.moveTo(X(x), Y(y)); ctx.lineTo(X(x), Y(groundY(P, x))); ctx.stroke();
+  });
   const body = [];
   for (const [u, hh] of g.top) body.push(p.w(u, hh));
   for (let i = g.under.length - 1; i >= 0; i--) body.push(p.w(g.under[i][0], g.under[i][1]));
@@ -1271,11 +1309,6 @@ function drawSide(col) {
     ctx.fillStyle = col.preview; ctx.fillText(plbl, X(pmx + dx), ply);
     ctx.restore();
   }
-  e.pts.forEach(([x, y, c], i) => {
-    if (i % 5 && c >= margin) return;
-    ctx.strokeStyle = c < 0 ? col.stop : c < margin ? col.warn : col.rule; ctx.lineWidth = c < margin ? 2 : 1;
-    ctx.beginPath(); ctx.moveTo(X(x), Y(y)); ctx.lineTo(X(x), Y(groundY(P, x))); ctx.stroke();
-  });
   const [mx, my] = e.minPt, mc = e.min < 0 ? col.stop : e.min < margin ? col.warn : col.go;
   ctx.beginPath(); ctx.arc(X(mx), Y(my), 4, 0, Math.PI * 2); ctx.fillStyle = mc; ctx.fill();
   ctx.font = '600 12px "IBM Plex Mono", monospace'; ctx.textAlign = 'center';
@@ -1407,10 +1440,13 @@ function moveTo(x) { pos = Math.max(sim.xs, Math.min(sim.xe, x)); lastClear = nu
 function renderCarFields() {
   const car = draft.car, est = new Set(car.est || []), applied = state.car;
   const F = T[lang].fields;
-  $('#car-fields').innerHTML = FIELD_KEYS.map(k => {
+  const KEY = ['WB', 'gc', 'fo', 'hF'];
+  const field = k => {
     const changed = +car[k] !== +applied[k];
     return `<label class="field${est.has(k) ? ' est' : ''}${changed ? ' changed' : ''}" title="${esc(F[k][1])}"><span>${F[k][0]}${est.has(k) ? `<b class="tag">${t('est')}</b>` : ''}</span><span class="unit-wrap"><input type="number" id="car-${k}" data-k="${k}" min="0" step="${IMP() ? 0.1 : 1}" value="${car[k] == null ? '' : carToDisp(car[k])}"><i>${carUnit()}</i></span></label>`;
-  }).join('');
+  };
+  $('#car-fields').innerHTML = KEY.map(field).join('');
+  $('#car-fields-more').innerHTML = FIELD_KEYS.filter(k => !KEY.includes(k)).map(field).join('');
   renderCarSource();
 }
 function renderCarSource() {
@@ -1422,7 +1458,7 @@ function updateDerived() {
   const bo = 2 * Math.atan(g.gc / (g.WB / 2)) * 180 / Math.PI;
   $('#car-derived').innerHTML = t('derived', fmtMm(g.ro * 1000), num(bo, 1), fmtMm(g.r * 1000)) + (g.ro < 0.4 ? ` <span style="color:var(--stop)">${t('roWarn')}</span>` : '');
 }
-$('#car-fields').addEventListener('input', ev => {
+function onCarField(ev) {
   const k = ev.target.dataset.k; if (!k) return;
   draft.car[k] = carFromDisp(+ev.target.value);
   draft.car.est = (draft.car.est || []).filter(x => x !== k);
@@ -1430,8 +1466,11 @@ $('#car-fields').addEventListener('input', ev => {
   f.classList.toggle('changed', +draft.car[k] !== +state.car[k]);
   if (!draft.car.edited) { draft.car.edited = true; renderCarSource(); }
   draftChanged();
-});
-$('#car-fields').addEventListener('keydown', e => { if (e.key === 'Enter') applyAll(); });
+}
+for (const id of ['#car-fields', '#car-fields-more']) {
+  $(id).addEventListener('input', onCarField);
+  $(id).addEventListener('keydown', e => { if (e.key === 'Enter') applyAll(); });
+}
 function renderPresets() {
   $('#preset').innerHTML = `<option value="">${t('presetPick')}</option>` + Object.entries(PRESETS).map(([k, p]) => `<option value="${k}">${esc(p.name)}</option>`).join('');
 }
@@ -1532,7 +1571,73 @@ function updateSegCalcs() {
     el.className = 'calc';
     el.textContent = `${num(g * 100, 1)} % · ${num(Math.atan(g) * 180 / Math.PI, 1)}° · ${d.dy >= 0 ? '+' : '−'}${fmtLen(Math.abs(d.dy))} / ${fmtLen(d.dx)} ${t('over')}`;
   });
+  renderRampEditor();
 }
+
+// ---------- ramp profile editor (drag corners) ----------
+let rampView = null, rampDrag = null;
+function renderRampEditor() {
+  const svg = $('#ramp-svg'); if (!svg) return;
+  const sl = draft.slope, pts = slopeProfile(sl).pts, n = pts.length - 1;
+  const xn = pts[n][0], lead = Math.max(0.8, xn * 0.12), totalX = xn + 2 * lead;
+  const ys = pts.map(q => q[1]), ymin = Math.min(...ys), ymax = Math.max(...ys), span = Math.max(0.05, ymax - ymin);
+  const sx = 560 / totalX, ex = Math.min(8, Math.max(1, Math.round(110 / (span * sx) * 2) / 2)), sy = sx * ex;
+  const view = rampDrag ? rampDrag.view : { ox: 20, oy: 165, sx, sy, lead, ymin, ex };
+  if (!rampDrag) rampView = view;
+  const X = x => view.ox + (x + view.lead) * view.sx, Y = y => view.oy - (y - view.ymin) * view.sy;
+  const line = [[-view.lead, 0], ...pts, [xn + view.lead, pts[n][1]]];
+  const d = line.map((q, i) => (i ? 'L' : 'M') + X(q[0]).toFixed(1) + ' ' + Y(q[1]).toFixed(1)).join(' ');
+  let out = `<path class="re-ground" d="${d} L${X(xn + view.lead).toFixed(1)} 200 L${X(-view.lead).toFixed(1)} 200 Z"/><path class="re-line" d="${d}"/>`;
+  out += `<text class="re-lbl" x="${X(-view.lead) + 4}" y="${Y(0) - 8}">${esc(t('reStreet'))}</text><text class="re-lbl" x="${X(xn + view.lead) - 4}" y="${Y(pts[n][1]) - 8}" text-anchor="end">${esc(t('reGarage'))}</text>`;
+  if (view.ex > 1) out += `<text class="re-lbl" x="10" y="16">${esc(t('reHeight', num(view.ex, view.ex % 1 ? 1 : 0)))}</text>`;
+  sl.segs.forEach((sg, i) => {
+    const a = pts[i], b = pts[i + 1], dd = segDelta(sg, sl.measure);
+    if (X(b[0]) - X(a[0]) < 70) return;
+    const mx = (X(a[0]) + X(b[0])) / 2, my = (Y(a[1]) + Y(b[1])) / 2;
+    out += `<text class="re-lbl re-seg" x="${mx.toFixed(1)}" y="${(my + 28).toFixed(1)}" text-anchor="middle">${esc(fmtLen(dd.dx) + ' · ' + num(dd.dy / dd.dx * 100, 0) + ' %')}</text>`;
+  });
+  for (let v = 1; v <= n; v++) {
+    out += `<g class="re-g" data-v="${v}" tabindex="0" role="slider" aria-label="${esc(t('reCorner', v))}" aria-valuetext="${esc(fmtLen(pts[v][0]) + ', ' + fmtLen(pts[v][1]))}"><circle class="re-hit" cx="${X(pts[v][0]).toFixed(1)}" cy="${Y(pts[v][1]).toFixed(1)}" r="18"/><circle class="re-h" cx="${X(pts[v][0]).toFixed(1)}" cy="${Y(pts[v][1]).toFixed(1)}" r="7"/></g>`;
+  }
+  svg.innerHTML = out;
+}
+function setSegFromPoints(i, a, b) {
+  const sg = draft.slope.segs[i], dx = Math.max(0.05, b[0] - a[0]), dy = b[1] - a[1];
+  sg.len = +(draft.slope.measure === 'surface' ? Math.hypot(dx, dy) : dx).toFixed(2);
+  sg.val = sg.mode === 'rise' ? +dy.toFixed(2) : sg.mode === 'angle' ? +(Math.atan2(dy, dx) * 180 / Math.PI).toFixed(1) : +(dy / dx * 100).toFixed(1);
+}
+function moveCorner(v, x, y) {
+  const pts = slopeProfile(draft.slope).pts, last = pts.length - 1;
+  x = Math.max(pts[v - 1][0] + 0.1, v < last ? Math.min(pts[v + 1][0] - 0.1, x) : x);
+  x = Math.round(x * 20) / 20; y = Math.round(y * 100) / 100;
+  setSegFromPoints(v - 1, pts[v - 1], [x, y]);
+  if (v < last) setSegFromPoints(v, [x, y], pts[v + 1]);
+  renderSegs(); draftChanged();
+}
+(() => {
+  const svg = $('#ramp-svg');
+  const toModel = e => {
+    const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+    const sp = pt.matrixTransform(svg.getScreenCTM().inverse()), vw = rampDrag.view;
+    return [(sp.x - vw.ox) / vw.sx - vw.lead, (vw.oy - sp.y) / vw.sy + vw.ymin];
+  };
+  svg.addEventListener('pointerdown', e => {
+    const g = e.target.closest('[data-v]'); if (!g) return;
+    e.preventDefault(); rampDrag = { v: +g.dataset.v, view: rampView };
+    try { svg.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+  svg.addEventListener('pointermove', e => { if (!rampDrag) return; const [x, y] = toModel(e); moveCorner(rampDrag.v, x, y); });
+  const end = () => { if (rampDrag) { rampDrag = null; renderRampEditor(); } };
+  svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', end);
+  svg.addEventListener('keydown', e => {
+    const g = e.target.closest('[data-v]'); if (!g) return;
+    const step = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, 1], ArrowDown: [0, -1] }[e.key]; if (!step) return;
+    e.preventDefault();
+    const v = +g.dataset.v, p = slopeProfile(draft.slope).pts[v], k = e.shiftKey ? 5 : 1;
+    moveCorner(v, p[0] + step[0] * 0.05 * k, p[1] + step[1] * 0.01 * k);
+    const ng = svg.querySelector(`[data-v="${v}"]`); if (ng) ng.focus();
+  });
+})();
 $('#segs').addEventListener('input', ev => {
   const row = ev.target.closest('.seg'); if (!row) return;
   const i = +row.dataset.i, f = ev.target.dataset.f, seg = draft.slope.segs[i];
@@ -1581,9 +1686,17 @@ const TOGGLES = [
   { ids: [['vx-1', 1], ['vx-2', 2]], get: () => state.view.vx, set: v => { state.view.vx = v; save(); draw(); } },
   { ids: [['u-metric', 'metric'], ['u-imperial', 'imperial']], get: () => state.units, set: v => { state.units = v; units = v; save(); fillSlopeStatic(); fillWidthStatic(); retranslate(); } },
   { ids: [['lang-en', 'en'], ['lang-hu', 'hu']], get: () => state.lang, set: v => { state.lang = v; lang = v; save(); retranslate(); } },
-  { ids: [['th-auto', 'auto'], ['th-light', 'light'], ['th-dark', 'dark']], get: () => state.theme, set: v => { state.theme = v; save(); applyTheme(); draw(); } },
 ];
-function syncToggles() { for (const tg of TOGGLES) for (const [id, v] of tg.ids) document.getElementById(id).setAttribute('aria-pressed', String(tg.get() === v)); }
+function syncThemeBtn() {
+  const b = $('#theme-btn'); b.dataset.mode = state.theme;
+  b.setAttribute('aria-label', t('theme' + state.theme[0].toUpperCase() + state.theme.slice(1))); b.title = b.getAttribute('aria-label');
+}
+$('#theme-btn').addEventListener('click', () => {
+  state.theme = { auto: 'light', light: 'dark', dark: 'auto' }[state.theme] || 'auto';
+  save(); applyTheme(); syncThemeBtn(); draw();
+});
+function syncToggles() {
+  syncThemeBtn(); for (const tg of TOGGLES) for (const [id, v] of tg.ids) document.getElementById(id).setAttribute('aria-pressed', String(tg.get() === v)); }
 for (const tg of TOGGLES) for (const [id, v] of tg.ids) document.getElementById(id).addEventListener('click', () => { tg.set(v); syncToggles(); });
 
 // ---------- theme ----------
@@ -1689,6 +1802,11 @@ $('#fb-form').addEventListener('submit', async e => {
 });
 
 // ---------- translation pass ----------
+const ABOUT_ICONS = [
+  '<svg width="120" height="44" viewBox="0 0 120 44" aria-hidden="true"><path d="M4 40 H40 L84 14 H116" fill="none" style="stroke: var(--ink)" stroke-width="2"/><path d="M26 30 L70 30" style="stroke: var(--accent)" stroke-width="2.4"/><circle cx="40" cy="40" r="3" style="fill: var(--stop)"/></svg>',
+  '<svg width="120" height="44" viewBox="0 0 120 44" aria-hidden="true"><path d="M4 40 H24 L40 36 L84 14 L100 12 H116" fill="none" style="stroke: var(--ink)" stroke-width="2"/><path d="M24 44 V30 M40 40 V26 M84 18 V4 M100 16 V2" style="stroke: var(--accent)" stroke-width="1.6" stroke-dasharray="3 3"/></svg>',
+  '<svg width="120" height="44" viewBox="0 0 120 44" aria-hidden="true"><rect x="2" y="12" width="34" height="20" rx="10" style="fill: color-mix(in srgb, var(--go) 18%, transparent)"/><rect x="42" y="12" width="34" height="20" rx="10" style="fill: color-mix(in srgb, var(--warn) 20%, transparent)"/><rect x="82" y="12" width="34" height="20" rx="10" style="fill: color-mix(in srgb, var(--stop) 18%, transparent)"/><circle cx="19" cy="22" r="5" style="fill: var(--go)"/><circle cx="59" cy="22" r="5" style="fill: var(--warn)"/><circle cx="99" cy="22" r="5" style="fill: var(--stop)"/></svg>',
+];
 function retranslate() {
   document.documentElement.lang = lang;
   document.querySelectorAll('[data-i]').forEach(el => { el.innerHTML = t(el.dataset.i, lenUnit()); });
@@ -1696,6 +1814,8 @@ function retranslate() {
   document.querySelectorAll('#speed option').forEach(o => { o.textContent = t(o.dataset.i) + ' · ' + fmtSpeed(+o.value); });
   document.querySelectorAll('[data-i-ph]').forEach(el => { el.placeholder = t(el.dataset.iPh); });
   $('#measure-list').innerHTML = T[lang].measure.map(x => `<li>${x}</li>`).join('');
+  document.querySelectorAll('.about-body > div').forEach((d, i) => { if (ABOUT_ICONS[i]) d.insertAdjacentHTML('afterbegin', ABOUT_ICONS[i]); });
+  syncThemeBtn();
   showLookup(lookupMsg.k, lookupMsg.a, lookupMsg.err);
   renderPresets(); renderCarFields(); renderSegs(); updateApplyBars(); updateSummaries();
   updateThanks(); if (fbMsg) showFb(fbMsg.k, fbMsg.err);
