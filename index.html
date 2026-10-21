@@ -281,6 +281,34 @@ details.panel.about { display: block; }
 .attrib a { color: inherit; }
 @media (max-width: 559px) { .db-row { grid-template-columns: minmax(0, 1fr); } }
 .diag-warn { font-size: 13px; padding: 8px 10px; border-radius: 6px; background: color-mix(in srgb, var(--stop) 10%, transparent); border: 1px solid color-mix(in srgb, var(--stop) 40%, transparent); }
+details.finder > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 36px; }
+details.finder > summary::-webkit-details-marker { display: none; }
+details.finder[open] > summary .chev { transform: rotate(180deg); }
+details.finder[open] > summary { margin-bottom: 10px; }
+.fd-body { display: flex; flex-direction: column; gap: 12px; }
+.fd-filters { display: grid; grid-template-columns: repeat(2, minmax(0, 110px)) repeat(2, minmax(0, 200px)) auto; gap: 10px 12px; align-items: end; }
+.fd-filters select { width: 100%; }
+.fd-go .btn { min-height: 38px; }
+.fd-status { font-size: 14px; }
+.fd-status .bar { height: 4px; border-radius: 2px; background: var(--inset); overflow: hidden; margin-top: 6px; max-width: 420px; }
+.fd-status .bar i { display: block; height: 100%; background: var(--accent); }
+.fd-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+.fd-stale { font-size: 13px; padding: 6px 10px; border-radius: 6px; background: color-mix(in srgb, var(--warn) 10%, transparent); border: 1px solid color-mix(in srgb, var(--warn) 40%, transparent); }
+.fd-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 8px; }
+.fd-row { display: flex; gap: 10px; align-items: center; border: 1px solid var(--rule); border-radius: 8px; padding: 8px 10px; min-width: 0; }
+.fd-row .d { width: 9px; height: 9px; border-radius: 50%; flex: none; background: var(--go); }
+.fd-row.warn .d { background: var(--warn); }
+.fd-row .nm { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
+.fd-row .nm b { font-weight: 600; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fd-row .nm span { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fd-row .v { text-align: right; display: flex; flex-direction: column; line-height: 1.3; flex: none; }
+.fd-row .v b { font: 600 14px var(--font-data); font-variant-numeric: tabular-nums; color: var(--go); }
+.fd-row.warn .v b { color: var(--warn); }
+.fd-row .v span { font-size: 11px; color: var(--muted); }
+.fd-row .btn { flex: none; }
+.finder-link { align-self: center; }
+@media (max-width: 559px) { .fd-row .nm b, .fd-row .nm span { white-space: normal; } .fd-row { align-items: flex-start; } .fd-row .d { margin-top: 6px; } }
+@media (max-width: 759px) { .fd-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); } .fd-go { grid-column: 1 / -1; } .fd-go .btn { width: 100%; } }
 details.about > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 36px; }
 details.about > summary::-webkit-details-marker { display: none; }
 details.about[open] > summary .chev { transform: rotate(180deg); }
@@ -373,6 +401,7 @@ details.about[open] > summary { margin-bottom: 10px; }
     </div>
     <button type="button" class="chips-toggle" id="chips-toggle" aria-expanded="false" aria-controls="res-chips"><span id="chips-sum"></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
     <div class="res-chips" id="res-chips"></div>
+    <button type="button" class="linkbtn finder-link" id="finder-link" data-i="fdT">Which cars fit this ramp?</button>
     <div class="res-share" id="res-share" hidden>
       <button class="btn share-btn" id="share-btn" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><span id="share-lbl" data-i="share">Copy link to this setup</span></button>
       <input type="text" id="share-url" readonly hidden aria-label="Link to this setup">
@@ -567,6 +596,32 @@ details.about[open] > summary { margin-bottom: 10px; }
     </section>
   </div>
 
+  <details class="panel finder" id="finder">
+    <summary><h2 data-i="fdT">Which cars fit this ramp?</h2><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+    <div class="fd-body">
+      <p class="hint" data-i="fdIntro">Checks cars from the list against your ramp, door and width settings, and lists the ones that are likely to fit.</p>
+      <div class="fd-filters">
+        <label class="field"><span data-i="fdFrom">Built from</span><select id="fd-from"></select></label>
+        <label class="field"><span data-i="fdTo">to</span><select id="fd-to"></select></label>
+        <label class="field"><span data-i="typeL">Body style</span><select id="fd-type"></select></label>
+        <label class="field"><span data-i="fdMake">Make</span><select id="fd-make"></select></label>
+        <div class="fd-go"><button type="button" class="btn primary" id="fd-run" data-i="fdGo">Find cars</button></div>
+      </div>
+      <div class="fd-stale" id="fd-stale" hidden><span data-i="fdStale">Your ramp or width settings changed since this search.</span> <button type="button" class="linkbtn" id="fd-again" data-i="fdAgain">Search again</button></div>
+      <div class="fd-status" id="fd-status" aria-live="polite"></div>
+      <div class="fd-head" id="fd-head" hidden>
+        <div class="seg-ctl" role="group" aria-label="Sort">
+          <button id="fd-sort-spare" aria-pressed="true" data-i="fdSortSpare">Most room first</button>
+          <button id="fd-sort-name" aria-pressed="false" data-i="fdSortName">A–Z</button>
+        </div>
+        <label class="chk"><input type="checkbox" id="fd-tight" checked> <span data-i="fdShowTight">Include tight fits</span></label>
+      </div>
+      <ol class="fd-list" id="fd-list"></ol>
+      <button type="button" class="btn small" id="fd-more" hidden></button>
+      <p class="hint" data-i="fdNote">Only cars with a listed ground clearance are included.</p>
+    </div>
+  </details>
+
   <details class="panel about" id="about" open>
     <summary><h2 id="about-h" data-i="aboutT">How Belly Check works</h2><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
     <div class="about-body" data-i="about"><div><h3>Where cars scrape</h3><p>The front bumper catches in dips, where the ramp gets steeper (approach angle). The underbody catches on crests, where it flattens out again (breakover angle). The rear bumper catches where the ramp levels out behind the car (departure angle). How sharply the slope changes matters more than the average slope.</p></div><div><h3>Measuring your ramp</h3><p>Split the ramp wherever the slope changes. For each piece, measure the length with a tape and the angle with a phone level app, or the rise with a straight edge and a spirit level. Short easing pieces at the top and bottom make a big difference, so include them.</p></div><div><h3>Reading the result</h3><p>Green clears with more than your safety margin, amber clears with less, red touches. A tight result is worth a real check: measure your own bumpers and underbody, and allow for passengers and luggage.</p></div></div>
@@ -696,12 +751,13 @@ const VTYPES = {
 };
 function inferType(c, hint) {
   const H = +c.H || 1500, L = +c.L || 4400, h = String(hint || '').toLowerCase();
-  if (/\bcab\b|pick-?up/.test(h)) return 'pickup';
+  if (/\bcab\b|pick-?up|amarok|hilux|ranger|navara|\bl200\b|d-max|tacoma|tundra|f-1[56]0|silverado|sierra|\bram\b|frontier|colorado|canyon|gladiator|triton|bt-50|x-class|maverick|ridgeline|santa cruz|cybertruck|titan|fullback|grand wall|poer|musso|alaskan|tunland|kp61/.test(h)) return 'pickup';
   if (H >= 2400) return L >= 8000 ? 'bus' : 'truck';
-  if (H >= 1850) return 'van';
+  if (H >= 2100 || (H >= 1750 && /\bvan\b|transporter|multivan|caravelle|sprinter|vito|v-class|transit|trafic|master|ducato|jumper|boxer|crafter|caddy|berlingo|partner|kangoo|proace|expert|jumpy|vivaro|movano/.test(h))) return 'van';
+  if (/staria|alphard|sienna|odyssey|carnival|pacifica|touran|sharan|galaxy|s-max|c-max|zafira|sc[eé]nic|espace|picasso|spacetourer|verso|mpv|minivan/.test(h)) return 'mpv';
   if (H >= 1580) return 'suv';
   if (/coupe|cabrio|convertible|roadster|spider|spyder/.test(h)) return 'coupe';
-  if (/wagon|estate|touring|combi|kombi|variant|avant|sports ?tourer/.test(h)) return 'estate';
+  if (/wagon|estate|touring|combi|kombi|variant|avant|sports ?tourer|alltrack|allroad|cross country|shooting brake|sportwagon|\bv[4-9]0\b|\bsw\b|\bbreak\b|outback/.test(h)) return 'estate';
   if (/sedan|saloon|limousine/.test(h)) return 'sedan';
   return L < 4450 ? 'hatch' : 'sedan';
 }
@@ -738,7 +794,7 @@ function carOutline(g) {
   return out;
 }
 
-function makeSim(car, slope, phi) {
+function makeSim(car, slope, phi, stepM) {
   const g = carGeom(car);
   const prof = buildProfile(slope, g.L, phi);
   const P = prof.pts;
@@ -747,31 +803,8 @@ function makeSim(car, slope, phi) {
   const toTravel = u => rev ? g.WB - u : u;   // u (rear-axle frame) -> distance ahead of trailing axle
   const xs = prof.x0 - 0.5 - leadOver - g.WB;
   const xe = prof.x1 + 0.5 + trailOver;
-  let header = null;
-  if (slope.header > 0) {
-    let hx;
-    if (slope.doorAt === 'custom') hx = prof.x0 + Math.max(0, +slope.doorX || 0) / Math.cos(phi);
-    else {
-      const garageHigher = prof.yTop >= 0;
-      const top = garageHigher ? prof.x1 : prof.x0, bottom = garageHigher ? prof.x0 : prof.x1;
-      hx = slope.doorAt === 'bottom' ? bottom : top;
-    }
-    header = { x: hx, y: groundY(P, hx) + slope.header };
-  }
-
-  function pose(xt) {
-    const yt = centerY(P, xt, g.r);
-    let lo = xt, hi = xt + g.WB;
-    for (let i = 0; i < 28; i++) {
-      const mid = (lo + hi) / 2;
-      if (Math.hypot(mid - xt, centerY(P, mid, g.r) - yt) < g.WB) lo = mid; else hi = mid;
-    }
-    const xl = (lo + hi) / 2, yl = centerY(P, xl, g.r);
-    const a = Math.atan2(yl - yt, xl - xt);
-    const ca = Math.cos(a), sa = Math.sin(a);
-    const w = (u, h) => { const d = toTravel(u), v = h - g.r; return [xt + d * ca - v * sa, yt + d * sa + v * ca]; };
-    return { xt, yt, xl, yl, a, w };
-  }
+  const header = headerOf(slope, prof, phi);
+  const pose = xt => poseAt(g, P, xt, toTravel, 28);
 
   function evalAt(xt, fast) {
     const p = pose(xt);
@@ -785,19 +818,11 @@ function makeSim(car, slope, phi) {
       if (c < zones[s.zone]) zones[s.zone] = c;
       if (c < min) { min = c; minPt = [x, y]; minZone = s.zone; }
     }
-    let head = null;
-    if (header) {
-      const roof = g.top.map(([u, h]) => p.w(u, h)).sort((A, B) => A[0] - B[0]);
-      if (header.x >= roof[0][0] && header.x <= roof[roof.length - 1][0]) {
-        for (let i = 1; i < roof.length; i++) {
-          if (header.x <= roof[i][0]) { const [ax, ay] = roof[i - 1], [bx, by] = roof[i]; const ry = ay + (by - ay) * (header.x - ax) / Math.max(1e-6, bx - ax); head = header.y - ry; break; }
-        }
-      }
-    }
+    const head = headRoom(g, p, header);
     return { pose: p, zones, min, minPt, minZone, pts, head };
   }
 
-  const step = 0.025, sweep = [];
+  const step = stepM || 0.025, sweep = [];
   for (let x = xs; x <= xe + 1e-9; x += step) {
     const e = evalAt(x, true);
     sweep.push({ x, min: e.min, zone: e.minZone, zones: e.zones, head: e.head, pt: e.minPt });
@@ -808,6 +833,71 @@ function makeSim(car, slope, phi) {
     if (s.head != null && (worstHead == null || s.head < worstHead.head)) worstHead = s;
   }
   return { g, prof, P, xs, xe, header, pose, evalAt, sweep, worst, worstHead, rev };
+}
+
+function headerOf(slope, prof, phi) {
+  if (!(slope.header > 0)) return null;
+  let hx;
+  if (slope.doorAt === 'custom') hx = prof.x0 + Math.max(0, +slope.doorX || 0) / Math.cos(phi);
+  else {
+    const garageHigher = prof.yTop >= 0;
+    const top = garageHigher ? prof.x1 : prof.x0, bottom = garageHigher ? prof.x0 : prof.x1;
+    hx = slope.doorAt === 'bottom' ? bottom : top;
+  }
+  return { x: hx, y: groundY(prof.pts, hx) + slope.header };
+}
+// Car pose with the trailing wheel at xt: the leading wheel sits one wheelbase away on the ground.
+function poseAt(g, P, xt, toTravel, iters) {
+  const yt = centerY(P, xt, g.r);
+  let lo = xt, hi = xt + g.WB;
+  for (let i = 0; i < iters; i++) {
+    const mid = (lo + hi) / 2;
+    if (Math.hypot(mid - xt, centerY(P, mid, g.r) - yt) < g.WB) lo = mid; else hi = mid;
+  }
+  const xl = (lo + hi) / 2, yl = centerY(P, xl, g.r);
+  const a = Math.atan2(yl - yt, xl - xt);
+  const ca = Math.cos(a), sa = Math.sin(a);
+  const w = (u, h) => { const d = toTravel(u), v = h - g.r; return [xt + d * ca - v * sa, yt + d * sa + v * ca]; };
+  return { xt, yt, xl, yl, a, w };
+}
+function headRoom(g, p, header) {
+  if (!header) return null;
+  const roof = g.top.map(([u, h]) => p.w(u, h)).sort((A, B) => A[0] - B[0]);
+  if (header.x < roof[0][0] || header.x > roof[roof.length - 1][0]) return null;
+  for (let i = 1; i < roof.length; i++) {
+    if (header.x <= roof[i][0]) { const [ax, ay] = roof[i - 1], [bx, by] = roof[i]; return header.y - (ay + (by - ay) * (header.x - ax) / Math.max(1e-6, bx - ax)); }
+  }
+  return null;
+}
+// Quick screen for the car finder. Underbody and ground are both polylines, so the closest
+// approach is at a corner of one of them: check underbody corners against the ground and
+// ground corners against the underbody instead of sampling the whole underside.
+function screenCar(car, slope, phi) {
+  const g = carGeom(car), prof = buildProfile(slope, g.L, phi), P = prof.pts, rev = slope.dir === 'rev';
+  const header = headerOf(slope, prof, phi);
+  const toTravel = u => rev ? g.WB - u : u;
+  const xs = prof.x0 - 0.5 - (rev ? g.ro : g.fo) - g.WB, xe = prof.x1 + 0.5 + (rev ? g.fo : g.ro);
+  const ZONE = ['rear', 'belly', 'belly', 'front'], SEGZ = ['rear', 'belly', 'front'];
+  let min = Infinity, zone = 'belly', head = null;
+  for (let xt = xs; xt <= xe + 1e-9; xt += 0.05) {
+    const p = poseAt(g, P, xt, toTravel, 16);
+    const U = g.under.map(([u, h]) => p.w(u, h));
+    for (let i = 0; i < 4; i++) { const c = signedClear(P, U[i][0], U[i][1]); if (c < min) { min = c; zone = ZONE[i]; } }
+    for (let k = 1; k < P.length - 1; k++) {
+      const [vx, vy] = P[k];
+      for (let i = 0; i < 3; i++) {
+        const [ax, ay] = U[i], [bx, by] = U[i + 1], lo = Math.min(ax, bx), hi = Math.max(ax, bx);
+        if (vx < lo || vx > hi || hi - lo < 1e-6) continue;
+        const uy = ay + (by - ay) * (vx - ax) / (bx - ax);
+        const d = Math.abs((bx - ax) * (vy - ay) - (by - ay) * (vx - ax)) / Math.hypot(bx - ax, by - ay);
+        const c = uy >= vy ? d : -d;
+        if (c < min) { min = c; zone = SEGZ[i]; }
+      }
+    }
+    const hr = headRoom(g, p, header);
+    if (hr != null && (head == null || hr < head)) head = hr;
+  }
+  return { g, min, zone, head };
 }
 
 // Lateral footprint of the car at angle phi (rad); mirrors at 0.68 L from the rear end
@@ -848,6 +938,16 @@ const T = {
     gcLowest: ' Ground clearance differs between versions; this is the lowest listed.',
     attrib: 'Car list: <a href="https://github.com/gor3a/vehicle-makes-models" target="_blank" rel="noopener">vehicle-makes-models</a>, data from autoevolution.com, under the ODbL 1.0 licence.',
     typeL: 'Body style', vt_hatch: 'Hatchback', vt_sedan: 'Saloon / sedan', vt_estate: 'Estate', vt_suv: 'SUV', vt_mpv: 'MPV', vt_coupe: 'Coupé', vt_pickup: 'Pickup', vt_van: 'Van', vt_truck: 'Lorry', vt_bus: 'Bus',
+    fdT: 'Which cars fit this ramp?', fdIntro: 'Checks cars from the list against your ramp, door and width settings, and lists the ones that are likely to fit, with the most room first.',
+    fdFrom: 'Built from', fdTo: 'to', fdMake: 'Make', fdAny: 'Any', fdAnyMake: 'Any make', fdGo: 'Find cars', fdStop: 'Stop',
+    fdProgress: (n, total) => `Checking ${n} of ${total} cars…`, fdNone: 'No cars in the list match these filters.',
+    fdSum: (fit, tight, total) => `${fit} of ${total} cars are likely to fit${tight ? `, ${tight} of them tightly` : ''}.`,
+    fdNoFit: total => `None of the ${total} matching cars clears this ramp. Easing pieces at the top or bottom, or driving diagonally, might change that.`,
+    fdStopped: (n, total) => `Stopped after ${n} of ${total} cars.`,
+    fdSortSpare: 'Most room first', fdSortName: 'A–Z', fdShowTight: 'Include tight fits', fdMore: n => `Show ${n} more`, fdLoad: 'Load', fdLoadA: name => `Load ${name}`,
+    fdStale: 'Your ramp or width settings changed since this search.', fdAgain: 'Search again',
+    fdRoom: 'room', fdVersions: n => `${n} versions`, fdLim_roof: 'roof', fdLim_ramp: 'ramp, each side', fdLim_door: 'door, each side',
+    fdNote: 'Only cars with a listed ground clearance are included. Overhangs and bumper heights are estimated, and the listed clearance may belong to another trim, so treat this as a shortlist: load a car to watch it on your ramp, and measure the real one before you buy.',
     step1: 'Pick your car', step2: 'Measure your ramp', step3: 'Roll it in', details: 'Details',
     share: 'Copy link to this setup', shareDone: 'Link copied', shareSelect: 'Copy the link below',
     rGo: c => `Clears with ${c} to spare`, rTight: c => `Tight: only ${c} to spare`, rScrape: z => `Won’t fit: the ${z} scrapes`,
@@ -956,6 +1056,16 @@ const T = {
     gcLowest: ' A hasmagasság változatonként eltér; ez a legalacsonyabb listázott érték.',
     attrib: 'Autólista: <a href="https://github.com/gor3a/vehicle-makes-models" target="_blank" rel="noopener">vehicle-makes-models</a>, forrás: autoevolution.com, ODbL 1.0 licenc alatt.',
     typeL: 'Karosszéria', vt_hatch: 'Ferdehátú', vt_sedan: 'Szedán', vt_estate: 'Kombi', vt_suv: 'SUV', vt_mpv: 'Egyterű', vt_coupe: 'Kupé', vt_pickup: 'Pickup', vt_van: 'Kisteherautó', vt_truck: 'Teherautó', vt_bus: 'Busz',
+    fdT: 'Mely autók nem akadnak fenn ezen a rámpán?', fdIntro: 'A lista autóit összeveti a rámpa, a kapu és a szélesség beállításaival, és felsorolja azokat, amelyek valószínűleg átférnek, a legtöbb hellyel kezdve.',
+    fdFrom: 'Évjárat ettől', fdTo: 'eddig', fdMake: 'Márka', fdAny: 'Bármelyik', fdAnyMake: 'Bármelyik márka', fdGo: 'Autók keresése', fdStop: 'Leállít',
+    fdProgress: (n, total) => `${total} autóból ${n} ellenőrizve…`, fdNone: 'A listában nincs a szűrőknek megfelelő autó.',
+    fdSum: (fit, tight, total) => `${total} autóból ${fit} valószínűleg átfér${tight ? `, ebből ${tight} szorosan` : ''}.`,
+    fdNoFit: total => `A ${total} találat közül egyik sem fér át ezen a rámpán. Átmeneti szakasz a rámpa alján vagy tetején, vagy a rézsútos áthajtás segíthet.`,
+    fdStopped: (n, total) => `Leállítva ${total} autóból ${n} után.`,
+    fdSortSpare: 'Legtöbb hely elöl', fdSortName: 'ABC', fdShowTight: 'Szoros eredmények is', fdMore: n => `Még ${n}`, fdLoad: 'Betöltés', fdLoadA: name => `${name} betöltése`,
+    fdStale: 'A rámpa vagy a szélesség beállításai változtak a keresés óta.', fdAgain: 'Újrakeresés',
+    fdRoom: 'hely', fdVersions: n => `${n} változat`, fdLim_roof: 'tető', fdLim_ramp: 'rámpa, oldalanként', fdLim_door: 'kapu, oldalanként',
+    fdNote: 'Csak azok az autók szerepelnek, amelyeknek ismert a hasmagassága. A túlnyúlások és a lökhárítók magassága becsült, a listában szereplő hasmagasság pedig más felszereltséghez is tartozhat, ezért ez csak előszűrés: töltsd be az autót, nézd meg a rámpádon, és vásárlás előtt mérd le a valódit.',
     step1: 'Válaszd ki az autót', step2: 'Mérd le a rámpát', step3: 'Gurítsd be', details: 'Részletek',
     share: 'Link másolása ehhez a beállításhoz', shareDone: 'Link másolva', shareSelect: 'Másold ki a lenti linket',
     rGo: c => `Átfér, ${c} tartalékkal`, rTight: c => `Szoros: csak ${c} tartalék`, rScrape: z => `Nem fér át: fennakad (${z})`,
@@ -1251,6 +1361,7 @@ function recompute(keepRel = true) {
   computePreview(false);
   updateKpis(); updateWidth();
   draw(); save();
+  if (typeof fd !== 'undefined' && fd.res) renderFinder();
 }
 
 function placeOf(x) {
@@ -1263,8 +1374,9 @@ function placeOf(x) {
   return t('place', t(g2 > g1 ? 'dip' : 'crest'), pc(g1), pc(g2));
 }
 const cls = (v, m) => v < 0 ? 'stop' : v < m ? 'warn' : 'go';
-function widthChecks() {
-  const g = sim.g, W = state.width, phi = W.phi * Math.PI / 180, out = [];
+function widthChecks() { return widthChecksFor(sim.g); }
+function widthChecksFor(g) {
+  const W = state.width, phi = W.phi * Math.PI / 180, out = [];
   if (W.ramp > 0) {
     const mir = W.sides === 'walls' && !W.fold, Lh = slopeProfile(state.slope).L;
     const needAt = a => footprint(g, a, mir) + (a > 0 ? (Lh + g.WB) * Math.tan(a) : 0);
@@ -1638,7 +1750,7 @@ let CARS = null, carsLoading = null;
 const dbSel = { make: '', model: '', gen: '' };
 function loadCars() {
   if (!carsLoading) carsLoading = fetch('cars.json').then(r => { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
-    .then(d => { CARS = d; renderDb(); }).catch(() => { $('#db-status').textContent = t('dbFail'); $('#db-make').innerHTML = `<option value="">${esc(t('dbFail'))}</option>`; });
+    .then(d => { CARS = d; renderDb(); renderFinderFilters(); }).catch(() => { $('#db-status').textContent = t('dbFail'); $('#db-make').innerHTML = `<option value="">${esc(t('dbFail'))}</option>`; });
   return carsLoading;
 }
 const genLabel = r => [r[0] ? `${r[0]}–${r[1] || ''}` : '', r[2], r[3]].filter(Boolean).join(' · ');
@@ -1664,6 +1776,10 @@ $('#db-model').addEventListener('change', e => {
 $('#db-gen').addEventListener('change', e => { dbSel.gen = e.target.value; if (dbSel.gen !== '') pickDbCar(); });
 function pickDbCar() {
   const mk = CARS.makes[+dbSel.make], mo = mk[1][+dbSel.model], r = mo[1][+dbSel.gen];
+  draft.car = dbCar(mk, mo, r); applyDraft('car');
+  gcEvent('db-pick', mk[0] + ' ' + mo[0]);
+}
+function dbCar(mk, mo, r) {
   const [, , , , L, W, H, WB, gc, gcVar, ty] = r;
   const est = ['fo', 'Wm', 'hF', 'hR'];
   const car = { name: `${mk[0]} ${mo[0]} (${genLabel(r)})`, src: 'db', edited: false, gcVar: !!gcVar,
@@ -1672,10 +1788,128 @@ function pickDbCar() {
   car.Wm = car.W + 220;
   car.hF = bumperFromAngle(car.fo, car.tyre, 15); car.hR = bumperFromAngle(L - WB - car.fo, car.tyre, 17);
   car.est = est; car.type = inferType(car, r[3] + ' ' + mo[0]);
-  draft.car = car; applyDraft('car');
-  gcEvent('db-pick', mk[0] + ' ' + mo[0]);
+  return car;
 }
 ['focus', 'pointerdown'].forEach(ev => $('#db-make').addEventListener(ev, loadCars));
+
+// ---------- car finder: which listed cars fit this ramp ----------
+const THIS_YEAR = new Date().getFullYear();
+var fd = { from: THIS_YEAR - 10, to: THIS_YEAR, type: '', make: '', sort: 'spare', tight: true, shown: 20, run: null, res: null, sig: '' };
+const fdSig = () => JSON.stringify([state.slope, state.width, state.drive]);
+function renderFinderFilters() {
+  const opt = (v, label, sel) => `<option value="${v}"${sel ? ' selected' : ''}>${esc(label)}</option>`;
+  const years = []; for (let y = THIS_YEAR; y >= 1990; y--) years.push(y);
+  $('#fd-from').innerHTML = years.map(y => opt(y, y, y === fd.from)).join('');
+  $('#fd-to').innerHTML = years.map(y => opt(y, y, y === fd.to)).join('');
+  $('#fd-type').innerHTML = opt('', t('fdAny')) + Object.keys(VTYPES).map(k => opt(k, t('vt_' + k), k === fd.type)).join('');
+  $('#fd-make').innerHTML = opt('', CARS ? t('fdAnyMake') : t('dbLoading')) + (CARS ? CARS.makes.map(m => opt(m[0], m[0], m[0] === fd.make)).join('') : '');
+  $('#fd-make').disabled = !CARS;
+}
+function fdCandidates() {
+  const out = [];
+  for (const mk of CARS.makes) {
+    if (fd.make && mk[0] !== fd.make) continue;
+    for (const mo of mk[1]) for (const r of mo[1]) {
+      if (!(r[8] > 0) || !(r[4] > 0) || !(r[7] > 0)) continue;
+      const y0 = r[0] || 0, y1 = r[1] || (r[0] ? THIS_YEAR : 0);
+      if (!y0 || y0 > fd.to || y1 < fd.from) continue;
+      const car = dbCar(mk, mo, r);
+      if (fd.type && car.type !== fd.type) continue;
+      out.push({ mk, mo, r, car });
+    }
+  }
+  return out;
+}
+function fdEvaluate(c) {
+  const margin = (state.slope.margin || 0) / 100;
+  const q = screenCar(c.car, { ...state.slope, dir: state.drive }, state.width.phi * Math.PI / 180);
+  // Rank by room above and below the car; width only decides fit or tight.
+  const vert = q.head != null && q.head < q.min ? { lim: 'roof', v: q.head } : { lim: q.zone, v: q.min };
+  const vst = vert.v < 0 ? 'stop' : vert.v < margin ? 'warn' : 'go';
+  let wst = 'go', wk = null;
+  for (const wc of widthChecksFor(q.g)) {
+    const k = wc.side < 0 ? 'stop' : wc.side < 0.1 ? 'warn' : 'go';
+    if (k === 'stop' || (k === 'warn' && wst === 'go')) { wst = k; wk = { lim: wc.key, v: wc.side }; }
+  }
+  const rank = { go: 0, warn: 1, stop: 2 };
+  c.st = rank[wst] > rank[vst] ? wst : vst;
+  const shown = rank[wst] > rank[vst] ? wk : vert;
+  c.lim = shown.lim; c.v = shown.v; c.score = vert.v;
+}
+async function runFinder() {
+  if (fd.run) { fd.run.stop = true; return; }
+  await loadCars(); if (!CARS) return;
+  const list = fdCandidates(), run = { stop: false }; fd.run = run; fd.res = null; fd.shown = 20; fd.sig = fdSig();
+  $('#fd-run').textContent = t('fdStop'); $('#fd-stale').hidden = true; $('#fd-head').hidden = true; $('#fd-list').innerHTML = ''; $('#fd-more').hidden = true;
+  let i = 0;
+  while (i < list.length && !run.stop) {
+    const t0 = performance.now();
+    while (i < list.length && performance.now() - t0 < 30) fdEvaluate(list[i++]);
+    $('#fd-status').innerHTML = `${esc(t('fdProgress', i, list.length))}<div class="bar"><i style="width:${(100 * i / Math.max(1, list.length)).toFixed(1)}%"></i></div>`;
+    await new Promise(r => setTimeout(r, 0));
+  }
+  fd.run = null; $('#fd-run').textContent = t('fdGo');
+  fd.res = { all: list.slice(0, i), total: list.length, stopped: run.stop };
+  renderFinder();
+  gcEvent('finder', `${fd.type || 'any'} ${fd.from}-${fd.to}${fd.make ? ' ' + fd.make : ''}`);
+}
+function renderFinder() {
+  if (fd.run) return;
+  $('#fd-stale').hidden = !fd.res || fd.sig === fdSig();
+  if (!fd.res) { $('#fd-status').textContent = ''; return; }
+  const { all, total, stopped } = fd.res;
+  const fit = all.filter(c => c.st !== 'stop'), tight = fit.filter(c => c.st === 'warn').length;
+  const status = !total ? t('fdNone') : stopped ? t('fdStopped', all.length, total) + ' ' + t('fdSum', fit.length, tight, all.length) : fit.length ? t('fdSum', fit.length, tight, total) : t('fdNoFit', total);
+  $('#fd-status').textContent = status;
+  // Variants of one model with the same result collapse into one row.
+  const groups = new Map();
+  for (const c of fit) {
+    if (!fd.tight && c.st !== 'go') continue;
+    const key = [dbName(c), c.st, c.lim, Math.round(c.v * 1000), c.car.type].join('|');
+    const g = groups.get(key);
+    if (!g) groups.set(key, { ...c, y0: c.r[0], y1: c.r[1] || 0, n: 1 });
+    else { g.n++; g.y0 = Math.min(g.y0, c.r[0]); g.y1 = g.y1 === 0 || !c.r[1] ? 0 : Math.max(g.y1, c.r[1]); }
+  }
+  let rows = [...groups.values()];
+  rows.sort(fd.sort === 'name' ? (a, b) => dbName(a).localeCompare(dbName(b)) || (a.r[0] - b.r[0]) : (a, b) => (a.st === b.st ? 0 : a.st === 'go' ? -1 : 1) || b.score - a.score);
+  $('#fd-head').hidden = !fit.length;
+  $('#fd-sort-spare').setAttribute('aria-pressed', fd.sort === 'spare'); $('#fd-sort-name').setAttribute('aria-pressed', fd.sort === 'name');
+  const shown = rows.slice(0, fd.shown);
+  $('#fd-list').innerHTML = shown.map((c, k) => {
+    const lim = ['front', 'belly', 'rear'].includes(c.lim) ? zone(c.lim) : t('fdLim_' + c.lim);
+    const name = dbName(c);
+    const sub = c.n > 1 ? [`${c.y0}–${c.y1 || ''}`, t('vt_' + c.car.type), t('fdVersions', c.n)] : [genLabel(c.r), t('vt_' + c.car.type)];
+    return `<li class="fd-row ${c.st}"><span class="d"></span><span class="nm"><b title="${esc(name)}">${esc(name)}</b><span>${esc(sub.join(' · '))}</span></span>`
+      + `<span class="v"><b>${sCm(c.v)}</b><span>${esc(lim)}</span></span><button type="button" class="btn small" data-fd="${k}" aria-label="${esc(t('fdLoadA', name))}">${esc(t('fdLoad'))}</button></li>`;
+  }).join('');
+  fd.rows = shown;
+  const more = rows.length - shown.length;
+  $('#fd-more').hidden = more <= 0; $('#fd-more').textContent = t('fdMore', Math.min(20, more));
+}
+const dbName = c => `${c.mk[0]} ${c.mo[0]}`;
+function fdLoad(c) {
+  dbSel.make = String(CARS.makes.indexOf(c.mk)); dbSel.model = String(c.mk[1].indexOf(c.mo)); dbSel.gen = String(c.mo[1].indexOf(c.r));
+  renderDb();
+  draft.car = dbCar(c.mk, c.mo, c.r); applyDraft('car');
+  gcEvent('finder-load', dbName(c));
+  $('#result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+$('#fd-run').addEventListener('click', runFinder);
+$('#fd-again').addEventListener('click', runFinder);
+$('#fd-list').addEventListener('click', e => { const b = e.target.closest('[data-fd]'); if (b && fd.rows) fdLoad(fd.rows[+b.dataset.fd]); });
+$('#fd-more').addEventListener('click', () => { fd.shown += 20; renderFinder(); });
+$('#fd-sort-spare').addEventListener('click', () => { fd.sort = 'spare'; fd.shown = 20; renderFinder(); });
+$('#fd-sort-name').addEventListener('click', () => { fd.sort = 'name'; fd.shown = 20; renderFinder(); });
+$('#fd-tight').addEventListener('change', e => { fd.tight = e.target.checked; fd.shown = 20; renderFinder(); });
+$('#fd-from').addEventListener('change', e => { fd.from = +e.target.value; if (fd.to < fd.from) { fd.to = fd.from; $('#fd-to').value = fd.to; } });
+$('#fd-to').addEventListener('change', e => { fd.to = +e.target.value; if (fd.from > fd.to) { fd.from = fd.to; $('#fd-from').value = fd.from; } });
+$('#fd-type').addEventListener('change', e => { fd.type = e.target.value; });
+$('#fd-make').addEventListener('change', e => { fd.make = e.target.value; });
+$('#finder').addEventListener('toggle', () => { if ($('#finder').open) loadCars(); });
+$('#finder-link').addEventListener('click', () => {
+  $('#finder').open = true; loadCars();
+  $('#finder').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
 
 // ---------- lookup via Claude ----------
 let sampleFn = null, lookupCtl = null, lookupBlocked = false, lookupMsg = { k: 'lkIdle', a: [] , err: false };
@@ -2038,6 +2272,7 @@ function retranslate() {
   syncThemeBtn();
   showLookup(lookupMsg.k, lookupMsg.a, lookupMsg.err);
   renderPresets(); renderCarFields(); renderSegs(); updateApplyBars(); updateSummaries(); renderDb();
+  renderFinderFilters(); if (fd.run) $('#fd-run').textContent = t('fdStop'); else renderFinder();
   updateThanks(); if (fbMsg) showFb(fbMsg.k, fbMsg.err);
   if (sim) { updateKpis(); updateWidth(); draw(); }
 }
