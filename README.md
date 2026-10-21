@@ -15,7 +15,7 @@ Will your car scrape on the garage ramp? Belly Check rolls a to-scale car up (or
 
 Inputs come in three numbered steps.
 
-1. **Your car:** pick a preset, type in your own measurements, or use **Look up**, which opens a web search for the car's dimensions (inside Claude it fills them in directly). A tape-measure guide is built in. Fields marked as estimates are worth measuring if the result is tight.
+1. **Your car:** pick make, model and generation from the car list, start from a preset, type in your own measurements, or use **Look up**, which opens a web search for the car's dimensions (inside Claude it fills them in directly). A tape-measure guide is built in. Fields marked as estimates are worth measuring if the result is tight.
 2. **Your ramp:** describe the ramp as pieces from the street to the garage floor. Give each piece a length and one of rise, angle or grade. Lengths can be measured along the surface or horizontally. Add easing pieces at the bottom or top, and use negative values for a ramp down into a basement. You can also drag the ramp's corners in the profile drawing.
 3. **Door and width:** set the ramp and door widths, and try driving diagonally across the slope to soften the transitions.
 
@@ -37,6 +37,16 @@ Bumper heights in presets are derived from published or typical approach and dep
 - Diagonal driving assumes one straight diagonal line across the whole ramp. The width check adds the sideways drift and says the largest angle that fits; the clearance model follows the car's centreline.
 - Preset dimensions are approximate and vary by trim, suspension and wheel size.
 
+## Car list
+
+The car picker uses `cars.json`, built by `tools/build_cars.py` from the [vehicle-makes-models](https://github.com/gor3a/vehicle-makes-models) dataset, whose data comes from autoevolution.com. For each make, model and generation it keeps length, width, height, wheelbase, the lowest listed ground clearance and the most common tyre size. Front overhang, mirror width and bumper heights aren't in the source, so the page estimates them and marks them as estimates. The data can be wrong or describe a different trim, and the page says so whenever a listed car is in use.
+
+`cars.json` is an adapted version of that database and, like its source, is available under the [Open Database License (ODbL) 1.0](https://opendatacommons.org/licenses/odbl/1-0/).
+
+To rebuild it, clone vehicle-makes-models and run `python3 tools/build_cars.py path/to/data/json/all.json cars.json`.
+
+Missing a car? Use **Can't find your car? Suggest it** under the picker.
+
 ## Site settings
 
 `config.js` holds optional settings, all public by design:
@@ -49,4 +59,4 @@ Leave a key empty and its feature stays hidden.
 
 ## Running locally
 
-It's a single `index.html` with no build step. Open it in a browser.
+It's a single `index.html` plus `cars.json`, with no build step. Serve the folder with any static web server (for example `python3 -m http.server`); opening the file directly works too, but browsers block the car list that way.
