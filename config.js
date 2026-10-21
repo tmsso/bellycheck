@@ -1,7 +1,7 @@
 // Belly Check site settings. Both values are public by design and safe to commit.
 window.BELLY_CONFIG = {
-  goatcounter: '', // GoatCounter site code, e.g. 'bellycheck' for https://bellycheck.goatcounter.com (visit stats + Thanks button)
-  web3forms: '',   // Web3Forms access key (feedback form; messages arrive by email)
+  goatcounter: 'bellycheck', // GoatCounter site code, e.g. 'bellycheck' for https://bellycheck.goatcounter.com (visit stats + Thanks button)
+  web3forms: '08f8b072-84e8-4620-a5b2-557f9f3e8484', // Web3Forms access key (feedback form; messages arrive by email)
 };
 (function (c) {
   if (!c.goatcounter) return;

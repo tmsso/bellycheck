@@ -46,6 +46,7 @@
   --ground-hatch: #B0BAC4;
   --car-fill: #D3E1F5;
   --tyre: #232A31;
+  --preview: #7A4CD9;
   --field: #FFFFFF;
   --font-display: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
   --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
@@ -55,14 +56,14 @@
   :root:not([data-theme="light"]) {
     --bg: #0D1218; --panel: #151C24; --inset: #10161D; --ink: #E1E7EE; --muted: #8B98A7; --rule: #26303B;
     --accent: #5E9CF4; --accent-ink: #0B1626; --accent-soft: #1A2A42; --go: #3DC487; --warn: #E6AF4A; --stop: #F2675C;
-    --ground: #29323C; --ground-hatch: #394450; --car-fill: #1F3350; --tyre: #05080B; --field: #0F151C;
+    --ground: #29323C; --ground-hatch: #394450; --car-fill: #1F3350; --tyre: #05080B; --field: #0F151C; --preview: #B39AF7;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0D1218; --panel: #151C24; --inset: #10161D; --ink: #E1E7EE; --muted: #8B98A7; --rule: #26303B;
   --accent: #5E9CF4; --accent-ink: #0B1626; --accent-soft: #1A2A42; --go: #3DC487; --warn: #E6AF4A; --stop: #F2675C;
-  --ground: #29323C; --ground-hatch: #394450; --car-fill: #1F3350; --tyre: #05080B; --field: #0F151C;
+  --ground: #29323C; --ground-hatch: #394450; --car-fill: #1F3350; --tyre: #05080B; --field: #0F151C; --preview: #B39AF7;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -149,7 +150,7 @@ label.chk { display: inline-flex; gap: 6px; align-items: center; font-size: 13px
 .tabs { display: flex; border-bottom: 1px solid var(--rule); margin: 0 -14px; padding: 0 8px; }
 .tabs button { border: 0; background: transparent; padding: 8px 10px; cursor: pointer; font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; display: inline-flex; gap: 6px; align-items: center; }
 .tabs button[aria-selected=true] { color: var(--ink); border-bottom-color: var(--accent); }
-.tabs button.dirty::after { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--warn); }
+.tabs button.dirty::after { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--preview); }
 .tabpanel { display: flex; flex-direction: column; gap: 14px; padding-top: 4px; }
 .hint { font-size: 12px; color: var(--muted); margin: 0; }
 .fields { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 10px 12px; }
@@ -159,7 +160,7 @@ label.chk { display: inline-flex; gap: 6px; align-items: center; font-size: 13px
 .unit-wrap input { width: 100%; padding-right: 36px; }
 .unit-wrap i { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-style: normal; font-size: 11px; color: var(--muted); pointer-events: none; }
 .field.est input { border-style: dashed; border-color: var(--warn); }
-.field.changed input { border-color: var(--accent); background: var(--accent-soft); }
+.field.changed input { border-color: var(--preview); background: color-mix(in srgb, var(--preview) 10%, var(--field)); }
 .tag { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; padding: 0 5px; border-radius: 3px; border: 1px solid var(--warn); color: var(--warn); }
 .derived { font-family: var(--font-data); font-size: 12px; color: var(--muted); }
 .derived b { color: var(--ink); font-weight: 500; }
@@ -185,7 +186,10 @@ details.measure ol { margin: 8px 0 0; padding-left: 20px; display: flex; flex-di
 .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .applybar { position: sticky; bottom: env(safe-area-inset-bottom, 0px); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 10px 14px; margin: 0 -14px -14px; background: var(--panel); border-top: 1px solid var(--rule); border-radius: 0 0 8px 8px; z-index: 2; }
 .applybar .state { font-size: 12px; color: var(--muted); flex: 1 1 140px; min-width: 0; }
-.applybar .state.pending { color: var(--warn); font-weight: 600; }
+.applybar .state.pending { color: var(--preview); font-weight: 600; }
+.pv-note { font-size: 12px; display: flex; gap: 8px; align-items: center; padding: 6px 10px; border: 1px dashed var(--preview); border-radius: 6px; background: color-mix(in srgb, var(--preview) 8%, transparent); }
+.pv-note .sw { width: 18px; border-top: 2px dashed var(--preview); flex: none; }
+.pv-note b { font-family: var(--font-data); font-weight: 600; color: var(--preview); }
 footer { font-size: 12px; color: var(--muted); max-width: 100ch; }
 .about-body { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px 24px; font-size: 13px; }
 .about-body h3 { font-family: var(--font-display); font-size: 15px; font-weight: 600; margin: 0 0 4px; }
@@ -269,6 +273,7 @@ footer { font-size: 12px; color: var(--muted); max-width: 100ch; }
           <button class="btn small" id="to-worst" data-i="toWorst">Jump to tightest</button>
         </div>
         <div class="readout" id="readout"></div>
+        <div class="pv-note" id="preview-note" hidden></div>
         <div class="msg" id="contact-msg" hidden></div>
       </section>
 
@@ -280,6 +285,7 @@ footer { font-size: 12px; color: var(--muted); max-width: 100ch; }
             <span style="--sw: var(--ink)" data-i="zFront">Front bumper</span>
             <span style="--sw: var(--muted)" data-i="zRear">Rear bumper</span>
             <span style="--sw: var(--warn)" data-i="marginL">Safety margin</span>
+            <span style="--sw: var(--preview)" id="legend-pv" data-i="pvLegend" hidden>Unapplied</span>
           </div>
           <canvas id="chart"></canvas>
           <p class="hint" data-i="chartHint">Tap or drag on the chart to move the car.</p>
@@ -652,6 +658,8 @@ const T = {
     fbMsgL: 'Message', fbMsgPh: 'What worked, what didn’t, which car or ramp…', fbEmailL: 'Email, only if you’d like a reply', fbCtx: 'Include my current car and ramp settings',
     fbSend: 'Send feedback', fbSending: 'Sending…', fbSent: 'Sent. Thank you!', fbErr: 'Couldn’t send it. Try again later.', fbEmpty: 'Write a few words first.',
     thanks: 'Say thanks', thanked: 'Thanks received',
+    pvLegend: 'Unapplied',
+    pvNote: (c, z, r) => `Dashed violet shows your unapplied changes: tightest point <b>${c}</b> (${z})${r ? `, roof to header <b>${r}</b>` : ''}. Apply to make it the main result.`,
     headerL: 'Door header height', off: 'off',
     marginHint: 'The margin covers suspension dip, passengers and luggage. The header height is measured from the ground at the door; leave it empty to skip the roof check.',
     rampW: 'Ramp width', doorW: 'Door opening width', sidesL: 'Ramp sides are', walls: 'Walls or posts', curbs: 'Low curbs',
@@ -690,10 +698,10 @@ const T = {
     derived: (ro, bo, r) => `Rear overhang <b>${ro}</b> · approx. breakover angle <b>${bo}°</b> · tyre radius <b>${r}</b>`,
     roWarn: 'Check length, wheelbase and front overhang: the rear overhang looks too short.',
     lkIdle: 'Asks Claude for factory dimensions. Bumper heights are derived from approach angles, so measure them if it’s tight.',
-    lkNone: 'Lookup works when this page is opened in Claude. Use a preset or your own measurements.',
+    lkWeb: 'Running outside Claude, so Look up opens a Google search for the car’s dimensions in a new tab. Opened as a Claude artifact, it would fill in the dimensions for you.',
     lkAsk: 'Asking Claude…',
     lkDone: (n, pub) => `Filled in ${n}. Bumper heights come from ${pub ? 'the published approach and departure angles' : 'typical angles'}; measure them if the result is tight.`,
-    lkStopped: 'Stopped.', lkDenied: 'Claude isn’t allowed for this page. Use a preset or your own measurements.',
+    lkStopped: 'Stopped.', lkDenied: 'Claude isn’t allowed for this page, so Look up opens a Google search instead.',
     lkRate: 'Too many lookups just now. Try again in a minute.', lkBad: 'Couldn’t get usable dimensions. Try a more specific name with the year and body style.', lkFail: 'The lookup failed. Try again.',
     tyreBad: 'Use the format 205/55 R16',
     fields: {
@@ -737,6 +745,8 @@ const T = {
     fbMsgL: 'Üzenet', fbMsgPh: 'Mi működött, mi nem, melyik autó vagy rámpa…', fbEmailL: 'E-mail, csak ha választ kérsz', fbCtx: 'Az aktuális autó- és rámpaadatok csatolása',
     fbSend: 'Küldés', fbSending: 'Küldés…', fbSent: 'Elküldve. Köszönöm!', fbErr: 'Nem sikerült elküldeni. Próbáld később.', fbEmpty: 'Írj előbb pár szót.',
     thanks: 'Köszönöm', thanked: 'Köszönet elküldve',
+    pvLegend: 'Nem alkalmazott',
+    pvNote: (c, z, r) => `A szaggatott lila a nem alkalmazott módosításokat mutatja: legszorosabb pont <b>${c}</b> (${z})${r ? `, tető–szemöldök <b>${r}</b>` : ''}. Az Alkalmaz gombbal lesz ez a fő eredmény.`,
     headerL: 'Kapuszemöldök magassága', off: 'nincs',
     marginHint: 'A ráhagyás fedezi a rugózást, az utasokat és a csomagot. A kapuszemöldök magasságát a kapunál lévő talajtól mérd; ha nincs, hagyd üresen.',
     rampW: 'Rámpa szélessége', doorW: 'Kapunyílás szélessége', sidesL: 'A rámpa szélén', walls: 'Fal vagy oszlop', curbs: 'Alacsony szegély',
@@ -775,10 +785,10 @@ const T = {
     derived: (ro, bo, r) => `Hátsó túlnyúlás <b>${ro}</b> · kb. rámpaszög <b>${bo}°</b> · gumi sugara <b>${r}</b>`,
     roWarn: 'Ellenőrizd a hosszt, a tengelytávot és az első túlnyúlást: a hátsó túlnyúlás túl rövidnek tűnik.',
     lkIdle: 'Claude-tól kéri le a gyári méreteket. A lökhárítók magassága a terepszögekből számolt, szoros esetben mérd le.',
-    lkNone: 'A keresés akkor működik, ha az oldalt a Claude-ban nyitod meg. Használj mintát vagy saját mérést.',
+    lkWeb: 'Claude-on kívül fut, ezért a Keresés új lapon Google-keresést nyit az autó méreteire. Claude-artefaktként megnyitva automatikusan kitöltené a méreteket.',
     lkAsk: 'Claude-ot kérdezem…',
     lkDone: (n, pub) => `Kitöltve: ${n}. A lökhárítók magassága ${pub ? 'a gyári terepszögekből' : 'jellemző szögekből'} számolt; szoros eredménynél mérd le.`,
-    lkStopped: 'Leállítva.', lkDenied: 'Ennek az oldalnak nincs engedélye Claude használatára. Használj mintát vagy saját mérést.',
+    lkStopped: 'Leállítva.', lkDenied: 'Ennek az oldalnak nincs engedélye Claude használatára, ezért a Keresés Google-keresést nyit.',
     lkRate: 'Túl sok keresés. Próbáld újra egy perc múlva.', lkBad: 'Nem jött használható méret. Adj meg pontosabb nevet évjárattal és karosszériával.', lkFail: 'A keresés nem sikerült. Próbáld újra.',
     tyreBad: 'Formátum: 205/55 R16',
     fields: {
@@ -907,8 +917,30 @@ function updateApplyBars() {
     $('#tab-' + k).classList.toggle('dirty', d);
   }
   updateDerived(); updateSegCalcs();
+  schedulePreview();
 }
 function draftChanged() { updateApplyBars(); }
+
+// live preview of unapplied car/slope edits
+let preview = null, pvTimer = null;
+const draftValid = c => c.L > 1000 && c.WB > 1000 && c.WB < c.L && c.tyre > 300 && c.H > 500 && c.fo > 0 && c.fo < c.L - c.WB;
+function computePreview(redraw = true) {
+  preview = null;
+  if (sim && (isDirty('car') || isDirty('slope')) && draftValid(draft.car)) {
+    try {
+      preview = makeSim(draft.car, { ...draft.slope, dir: state.drive }, state.width.phi * Math.PI / 180);
+      preview.dx = sim.prof.x0 - preview.prof.x0;
+    } catch (e) { preview = null; }
+  }
+  const el = $('#preview-note');
+  if (preview) {
+    el.hidden = false;
+    el.innerHTML = '<span class="sw"></span><span>' + t('pvNote', sCm(preview.worst.min), zone(preview.worst.zone), preview.worstHead ? sCm(preview.worstHead.head) : '') + '</span>';
+  } else el.hidden = true;
+  $('#legend-pv').hidden = !preview;
+  if (redraw) draw();
+}
+function schedulePreview() { clearTimeout(pvTimer); pvTimer = setTimeout(computePreview, 150); }
 
 // ---------- simulation ----------
 let sim = null, pos = 0, playing = false, lastT = 0, lastClear = null;
@@ -918,6 +950,7 @@ function recompute(keepRel = true) {
   pos = keepRel ? sim.xs + Math.min(1, Math.max(0, rel)) * (sim.xe - sim.xs) : sim.worst.x;
   lastClear = null;
   $('#contact-msg').hidden = true;
+  computePreview(false);
   updateKpis(); updateWidth();
   draw(); save();
 }
@@ -981,7 +1014,7 @@ function fitCanvas(c, h) {
   const ctx = c.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   return { ctx, w, h };
 }
-const colors = () => ({ ink: css('--ink'), muted: css('--muted'), rule: css('--rule'), ground: css('--ground'), hatch: css('--ground-hatch'), car: css('--car-fill'), accent: css('--accent'), tyre: css('--tyre'), stop: css('--stop'), warn: css('--warn'), go: css('--go'), inset: css('--inset'), panel: css('--panel') });
+const colors = () => ({ ink: css('--ink'), muted: css('--muted'), rule: css('--rule'), ground: css('--ground'), hatch: css('--ground-hatch'), car: css('--car-fill'), accent: css('--accent'), tyre: css('--tyre'), stop: css('--stop'), warn: css('--warn'), go: css('--go'), inset: css('--inset'), panel: css('--panel'), preview: css('--preview') });
 function draw() { if (!sim) return; const col = colors(); drawSide(col); drawChart(col); drawPlan(col); updateReadout(); syncScrub(); updatePlayLabel(); }
 
 function drawSide(col) {
@@ -1051,6 +1084,28 @@ function drawSide(col) {
     ctx.beginPath(); ctx.ellipse(X(x), Y(y), g.r * s, g.r * s * vx, 0, 0, Math.PI * 2); ctx.fillStyle = col.tyre; ctx.fill();
     ctx.beginPath(); ctx.ellipse(X(x), Y(y), g.r * s * 0.55, g.r * s * 0.55 * vx, 0, 0, Math.PI * 2); ctx.fillStyle = col.muted; ctx.fill();
   }
+  if (preview) {
+    const pv = preview, dx = pv.dx, ppos = Math.max(pv.xs, Math.min(pv.xe, pos - dx));
+    const pe = pv.evalAt(ppos), pp = pe.pose, pgm = pv.g;
+    ctx.save(); ctx.strokeStyle = col.preview; ctx.fillStyle = col.preview; ctx.setLineDash([6, 4]); ctx.lineWidth = 2;
+    ctx.beginPath(); pv.P.forEach(([x, y], i) => i ? ctx.lineTo(X(x + dx), Y(y)) : ctx.moveTo(X(x + dx), Y(y))); ctx.stroke();
+    if (pv.header) { const hx = X(pv.header.x + dx), hy = Y(pv.header.y); ctx.lineWidth = 1.5; ctx.strokeRect(hx - 6, -2, 18, Math.max(0, hy) + 2); }
+    const pbody = [];
+    for (const [u, hh] of pgm.top) pbody.push(pp.w(u, hh));
+    for (let i = pgm.under.length - 1; i >= 0; i--) pbody.push(pp.w(pgm.under[i][0], pgm.under[i][1]));
+    ctx.beginPath(); pbody.forEach(([x, y], i) => i ? ctx.lineTo(X(x + dx), Y(y)) : ctx.moveTo(X(x + dx), Y(y))); ctx.closePath();
+    ctx.globalAlpha = 0.08; ctx.fill(); ctx.globalAlpha = 1; ctx.lineWidth = 1.8; ctx.stroke();
+    for (const [x, y] of [[pp.xt, pp.yt], [pp.xl, pp.yl]]) { ctx.beginPath(); ctx.ellipse(X(x + dx), Y(y), pgm.r * s, pgm.r * s * vx, 0, 0, Math.PI * 2); ctx.stroke(); }
+    ctx.setLineDash([]);
+    const [pmx, pmy] = pe.minPt;
+    ctx.beginPath(); ctx.arc(X(pmx + dx), Y(pmy), 4, 0, Math.PI * 2); ctx.fill();
+    ctx.font = '600 12px "IBM Plex Mono", monospace'; ctx.textAlign = 'center';
+    const plbl = sCm(pe.min), ply = Math.min(h - 4, Y(groundY(P, pmx + dx)) + 38), ptw = ctx.measureText(plbl).width + 10;
+    ctx.fillStyle = col.panel; ctx.fillRect(X(pmx + dx) - ptw / 2, ply - 12, ptw, 16);
+    ctx.setLineDash([3, 2]); ctx.lineWidth = 1; ctx.strokeRect(X(pmx + dx) - ptw / 2, ply - 12, ptw, 16); ctx.setLineDash([]);
+    ctx.fillStyle = col.preview; ctx.fillText(plbl, X(pmx + dx), ply);
+    ctx.restore();
+  }
   e.pts.forEach(([x, y, c], i) => {
     if (i % 5 && c >= margin) return;
     ctx.strokeStyle = c < 0 ? col.stop : c < margin ? col.warn : col.rule; ctx.lineWidth = c < margin ? 2 : 1;
@@ -1076,7 +1131,7 @@ function drawChart(col) {
   const { ctx, w, h } = fitCanvas(c, 170);
   ctx.fillStyle = col.inset; ctx.fillRect(0, 0, w, h);
   const S = sim.sweep, margin = (state.slope.margin || 0) / 100;
-  let lo = Math.min(-0.03, sim.worst.min - 0.02), hi = 0.05;
+  let lo = Math.min(-0.03, sim.worst.min - 0.02, preview ? preview.worst.min - 0.02 : 0), hi = 0.05;
   for (const s of S) for (const z of ['front', 'belly', 'rear']) if (isFinite(s.zones[z])) hi = Math.max(hi, s.zones[z]);
   hi = Math.min(Math.max(hi + 0.02, 0.15), 0.6);
   const L = 44, R = 10, T0 = 10, B = 22;
@@ -1103,6 +1158,12 @@ function drawChart(col) {
   ctx.fillStyle = col.accent; ctx.globalAlpha = 0.1; ctx.fill(); ctx.globalAlpha = 1;
   const line = (z, color, width) => { ctx.strokeStyle = color; ctx.lineWidth = width; ctx.beginPath(); S.forEach((s, i) => { const v = s.zones[z]; i ? ctx.lineTo(X(s.x), Y(v)) : ctx.moveTo(X(s.x), Y(v)); }); ctx.stroke(); };
   line('rear', col.muted, 1.4); line('front', col.ink, 1.4); line('belly', col.accent, 2.2);
+  if (preview) {
+    ctx.save(); ctx.beginPath(); ctx.rect(L, T0, w - L - R, h - T0 - B); ctx.clip();
+    ctx.strokeStyle = col.preview; ctx.lineWidth = 2; ctx.setLineDash([6, 4]); ctx.beginPath();
+    preview.sweep.forEach((p2, i) => { const xx = X(p2.x + preview.dx), yy = Y(p2.min); i ? ctx.lineTo(xx, yy) : ctx.moveTo(xx, yy); });
+    ctx.stroke(); ctx.restore();
+  }
   ctx.beginPath(); ctx.arc(X(sim.worst.x), Y(sim.worst.min), 4, 0, Math.PI * 2); ctx.fillStyle = sim.worst.min < 0 ? col.stop : sim.worst.min < margin ? col.warn : col.ink; ctx.fill();
   ctx.strokeStyle = col.ink; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(X(pos), T0); ctx.lineTo(X(pos), h - B); ctx.stroke();
   c._map = { L, R, w };
@@ -1225,10 +1286,11 @@ let sampleFn = null, lookupCtl = null, lookupBlocked = false, lookupMsg = { k: '
 function showLookup(k, a = [], err = false) { lookupMsg = { k, a, err }; const st = $('#lookup-status'); st.textContent = t(k, ...a); st.classList.toggle('err', err); }
 (async () => {
   try { sampleFn = window.claude && window.claude.use ? await window.claude.use('sample') : null; } catch (e) { sampleFn = null; }
-  if (!sampleFn) { lookupBlocked = true; $('#lookup-q').closest('.kv').hidden = true; }
+  if (!sampleFn) { lookupBlocked = true; showLookup('lkWeb'); }
 })();
 async function lookup() {
-  const q = $('#lookup-q').value.trim(); if (!q || !sampleFn) return;
+  const q = $('#lookup-q').value.trim(); if (!q) return;
+  if (!sampleFn || lookupBlocked) { openSearch(q); return; }
   showLookup('lkAsk');
   $('#lookup-go').disabled = true; $('#lookup-stop').hidden = false;
   lookupCtl = new AbortController();
@@ -1265,8 +1327,15 @@ Reply with only this JSON object:
     if (code === 'not_granted' || code === 'sampling_disabled') lookupBlocked = true;
     showLookup(code === 'cancelled' ? 'lkStopped' : lookupBlocked ? 'lkDenied' : code === 'rate_limited' ? 'lkRate' : code === 'no_dims' || code === 'invalid_json' ? 'lkBad' : 'lkFail', [], code !== 'cancelled');
   } finally {
-    $('#lookup-stop').hidden = true; $('#lookup-go').disabled = lookupBlocked;
+    $('#lookup-stop').hidden = true; $('#lookup-go').disabled = false;
   }
+}
+function openSearch(q) {
+  const extra = lang === 'hu' ? ' méretek tengelytáv hasmagasság' : ' dimensions wheelbase ground clearance mm';
+  const a = document.createElement('a');
+  a.href = 'https://www.google.com/search?q=' + encodeURIComponent(q + extra); a.target = '_blank'; a.rel = 'noopener';
+  document.body.appendChild(a); a.click(); a.remove();
+  gcEvent('lookup-web', 'Web lookup');
 }
 $('#lookup-go').addEventListener('click', lookup);
 $('#lookup-q').addEventListener('keydown', e => { if (e.key === 'Enter') lookup(); });
