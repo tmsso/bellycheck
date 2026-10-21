@@ -8,7 +8,7 @@ Will your car scrape on the garage ramp? Belly Check rolls a to-scale car up (or
 
 - **Front and rear bumpers** at the dips, where the ramp gets steeper (approach and departure)
 - **Underbody** at the crests, where the ramp flattens out (breakover)
-- **Roof against the door header**, if you give a header height
+- **Roof against the door header**, with the door at the top or bottom of the ramp or anywhere along it
 - **Width** of the ramp and the door opening, with mirrors open or folded, and against walls or low curbs
 
 ## How to use it
@@ -18,7 +18,7 @@ Will your car scrape on the garage ramp? Belly Check rolls a to-scale car up (or
 3. **Apply** your changes, then press **Play** or drag the slider. The car creeps along and can stop at the first contact. Undo steps back through earlier versions.
 4. **Width & door:** set the ramp and door widths, and try driving diagonally across the slope to soften the transitions.
 
-The page works in English and Hungarian, with light and dark themes. Your settings are saved in the browser.
+The page works in English and Hungarian, in metric or imperial units (US visitors start in imperial, based on their time zone), with light and dark themes. Your settings are saved in the browser.
 
 ## How it works
 
@@ -31,6 +31,15 @@ Bumper heights in presets are derived from published or typical approach and dep
 - Suspension is rigid. Use the safety margin (default 3 cm) for load and dip.
 - Diagonal driving is modelled along the car's centreline only.
 - Preset dimensions are approximate and vary by trim, suspension and wheel size.
+
+## Site settings
+
+`config.js` holds two optional keys, both public by design:
+
+- `goatcounter`: a [GoatCounter](https://www.goatcounter.com) site code. Turns on cookie-free visit stats and the **Say thanks** button, which is counted as a `thanks` event.
+- `web3forms`: a [Web3Forms](https://web3forms.com) access key. Turns on the collapsed **Feedback** form, whose messages arrive by email without exposing the address.
+
+With both empty, the page shows neither.
 
 ## Running locally
 

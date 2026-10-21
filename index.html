@@ -3,8 +3,27 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Check whether a car will scrape on a garage ramp: to-scale side view with bumpers, underbody, roof and mirror width.">
-<title>Will My Car Clear the Ramp?</title>
+<title>Belly Check – will your car scrape on the garage ramp?</title>
+<meta name="description" content="Free garage ramp and driveway clearance check. Roll a to-scale car over your slope and see whether the bumpers, underbody, roof or mirrors will hit.">
+<link rel="canonical" href="https://bellycheck.tmsso.com/">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#1F5FB8">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Belly Check">
+<meta property="og:title" content="Belly Check – will your car scrape on the garage ramp?">
+<meta property="og:description" content="Free garage ramp and driveway clearance check. Roll a to-scale car over your slope and see whether the bumpers, underbody, roof or mirrors will hit.">
+<meta property="og:url" content="https://bellycheck.tmsso.com/">
+<meta property="og:image" content="https://bellycheck.tmsso.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A car rolling over a garage ramp with clearance under the car marked">
+<meta property="og:locale" content="en_GB">
+<meta property="og:locale:alternate" content="hu_HU">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Belly Check", "url": "https://bellycheck.tmsso.com/", "description": "Free garage ramp and driveway clearance check. Roll a to-scale car over your slope and see whether the bumpers, underbody, roof or mirrors will hit.", "image": "https://bellycheck.tmsso.com/og-image.png", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "browserRequirements": "Requires JavaScript", "inLanguage": ["en", "hu"], "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}, "featureList": ["Garage ramp and driveway clearance simulation", "Approach, breakover and departure checks", "Roof clearance against the garage door header", "Ramp and door width check with mirrors", "Multi-piece slope profiles with easing transitions", "English and Hungarian"]}</script>
+<script src="config.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
@@ -168,20 +187,39 @@ details.measure ol { margin: 8px 0 0; padding-left: 20px; display: flex; flex-di
 .applybar .state { font-size: 12px; color: var(--muted); flex: 1 1 140px; min-width: 0; }
 .applybar .state.pending { color: var(--warn); font-weight: 600; }
 footer { font-size: 12px; color: var(--muted); max-width: 100ch; }
+.about-body { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px 24px; font-size: 13px; }
+.about-body h3 { font-family: var(--font-display); font-size: 15px; font-weight: 600; margin: 0 0 4px; }
+.about-body p { margin: 0; color: var(--muted); max-width: 65ch; }
+.feedback-row { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
+.fb { flex: 1 1 320px; padding: 10px 14px; }
+.fb summary { cursor: pointer; font-family: var(--font-display); font-weight: 600; font-size: 14px; }
+.fb[open] summary { margin-bottom: 8px; }
+.fb form { display: flex; flex-direction: column; gap: 10px; max-width: 640px; }
+.fb textarea, .fb input[type=email] { width: 100%; background: var(--field); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 8px; font: inherit; color: inherit; }
+.fb textarea { resize: vertical; min-height: 90px; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.btn.thanks { display: inline-flex; gap: 6px; align-items: center; min-height: 40px; }
+.btn.thanks svg { color: var(--stop); }
+.btn.thanks:disabled { opacity: 1; cursor: default; color: var(--muted); }
 </style>
 </head>
 <body>
 
+<noscript><p style="padding:16px">Belly Check needs JavaScript to run the simulation.</p></noscript>
 <div class="wrap">
   <header class="topbar">
     <div class="brand">
       <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect x="0.5" y="0.5" width="33" height="33" rx="7" fill="var(--accent-soft)" stroke="var(--rule)"/><path d="M4 26 H11 L23 16 H30" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linejoin="round"/><circle cx="14.5" cy="20" r="2.2" fill="var(--ink)"/><circle cx="21" cy="14.6" r="2.2" fill="var(--ink)"/></svg>
-      <div><h1 data-i="title">Will my car clear the ramp?</h1><p data-i="sub"></p></div>
+      <div><h1 data-i="title">Will my car clear the ramp?</h1><p data-i="sub">To-scale check of bumpers, underbody, roof and width on a garage slope.</p></div>
     </div>
     <div class="top-ctl">
       <div class="seg-ctl" role="group" aria-label="Language">
         <button id="lang-en" aria-pressed="true">EN</button>
         <button id="lang-hu" aria-pressed="false">HU</button>
+      </div>
+      <div class="seg-ctl" role="group" aria-label="Units">
+        <button id="u-metric" aria-pressed="true" data-i="unitsMetric">Metric</button>
+        <button id="u-imperial" aria-pressed="false" data-i="unitsImperial">Imperial</button>
       </div>
       <div class="seg-ctl" role="group" aria-label="Theme">
         <button id="th-auto" aria-pressed="true" data-i="thAuto">Auto</button>
@@ -197,16 +235,16 @@ footer { font-size: 12px; color: var(--muted); max-width: 100ch; }
     <div class="col">
       <section class="panel">
         <div class="ph">
-          <h2 data-i="side"></h2>
+          <h2 data-i="side">Side elevation</h2>
           <div class="row">
             <div class="seg-ctl" role="group" aria-label="Zoom">
-              <button id="zoom-whole" data-i="zWhole"></button>
-              <button id="zoom-car" data-i="zCar"></button>
-              <button id="zoom-close" data-i="zClose"></button>
+              <button id="zoom-whole" data-i="zWhole">Whole ramp</button>
+              <button id="zoom-car" data-i="zCar">Car</button>
+              <button id="zoom-close" data-i="zClose">Close-up</button>
             </div>
             <div class="seg-ctl" role="group" aria-label="Vertical scale">
               <button id="vx-1">1×</button>
-              <button id="vx-2" data-i="vx2"></button>
+              <button id="vx-2" data-i="vx2">2× height</button>
             </div>
           </div>
         </div>
@@ -217,18 +255,18 @@ footer { font-size: 12px; color: var(--muted); max-width: 100ch; }
           <button class="btn icon" id="fwd" aria-label="+5 cm">›</button>
           <div class="grow"><input type="range" id="scrub" min="0" max="1000" value="0" aria-label="Position"></div>
           <select id="speed" aria-label="Speed">
-            <option value="0.08" data-i="sp1"></option>
-            <option value="0.25" data-i="sp2" selected></option>
-            <option value="0.6" data-i="sp3"></option>
+            <option value="0.08" data-i="sp1">Creep · 8 cm/s</option>
+            <option value="0.25" data-i="sp2" selected>Slow · 25 cm/s</option>
+            <option value="0.6" data-i="sp3">Walking · 60 cm/s</option>
           </select>
         </div>
         <div class="toolbar">
           <div class="seg-ctl" role="group" aria-label="Direction">
-            <button id="dir-fwd" data-i="dirFwd"></button>
-            <button id="dir-rev" data-i="dirRev"></button>
+            <button id="dir-fwd" data-i="dirFwd">Forwards</button>
+            <button id="dir-rev" data-i="dirRev">Reversing</button>
           </div>
-          <label class="chk"><input type="checkbox" id="stop-contact" checked> <span data-i="stopContact"></span></label>
-          <button class="btn small" id="to-worst" data-i="toWorst"></button>
+          <label class="chk"><input type="checkbox" id="stop-contact" checked> <span data-i="stopContact">Stop at contact</span></label>
+          <button class="btn small" id="to-worst" data-i="toWorst">Jump to tightest</button>
         </div>
         <div class="readout" id="readout"></div>
         <div class="msg" id="contact-msg" hidden></div>
@@ -236,18 +274,18 @@ footer { font-size: 12px; color: var(--muted); max-width: 100ch; }
 
       <div class="sub2">
         <section class="panel">
-          <div class="ph"><h2 data-i="chartT"></h2></div>
+          <div class="ph"><h2 data-i="chartT">Clearance along the way</h2></div>
           <div class="legend">
-            <span style="--sw: var(--accent)" data-i="zBelly"></span>
-            <span style="--sw: var(--ink)" data-i="zFront"></span>
-            <span style="--sw: var(--muted)" data-i="zRear"></span>
-            <span style="--sw: var(--warn)" data-i="marginL"></span>
+            <span style="--sw: var(--accent)" data-i="zBelly">Underbody</span>
+            <span style="--sw: var(--ink)" data-i="zFront">Front bumper</span>
+            <span style="--sw: var(--muted)" data-i="zRear">Rear bumper</span>
+            <span style="--sw: var(--warn)" data-i="marginL">Safety margin</span>
           </div>
           <canvas id="chart"></canvas>
-          <p class="hint" data-i="chartHint"></p>
+          <p class="hint" data-i="chartHint">Tap or drag on the chart to move the car.</p>
         </section>
         <section class="panel">
-          <div class="ph"><h2 data-i="planT"></h2><span class="hint mono" id="plan-hint"></span></div>
+          <div class="ph"><h2 data-i="planT">Plan view</h2><span class="hint mono" id="plan-hint"></span></div>
           <canvas id="plan"></canvas>
           <div class="width-out" id="width-out"></div>
         </section>
@@ -256,106 +294,135 @@ footer { font-size: 12px; color: var(--muted); max-width: 100ch; }
 
     <section class="panel" aria-label="Inputs">
       <div class="tabs" role="tablist">
-        <button role="tab" id="tab-car" aria-selected="true" aria-controls="p-car" data-i="tCar"></button>
-        <button role="tab" id="tab-slope" aria-selected="false" aria-controls="p-slope" data-i="tSlope"></button>
-        <button role="tab" id="tab-width" aria-selected="false" aria-controls="p-width" data-i="tWidth"></button>
+        <button role="tab" id="tab-car" aria-selected="true" aria-controls="p-car" data-i="tCar">Car</button>
+        <button role="tab" id="tab-slope" aria-selected="false" aria-controls="p-slope" data-i="tSlope">Slope</button>
+        <button role="tab" id="tab-width" aria-selected="false" aria-controls="p-width" data-i="tWidth">Width &amp; door</button>
       </div>
 
       <div class="tabpanel" id="p-car" role="tabpanel">
         <div class="kv">
-          <span data-i="lookupL"></span>
+          <span data-i="lookupL">Look up a car</span>
           <div class="lookup">
-            <input type="text" id="lookup-q" autocomplete="off" data-i-ph="lookupPh">
-            <button class="btn primary" id="lookup-go" data-i="lookupGo"></button>
-            <button class="btn" id="lookup-stop" data-i="stop" hidden></button>
+            <input type="text" id="lookup-q" autocomplete="off" data-i-ph="lookupPh" placeholder="e.g. 2021 Škoda Octavia Combi">
+            <button class="btn primary" id="lookup-go" data-i="lookupGo">Look up</button>
+            <button class="btn" id="lookup-stop" data-i="stop" hidden>Stop</button>
           </div>
           <div class="lookup-status" id="lookup-status"></div>
         </div>
         <div class="kv">
-          <span data-i="presetL"></span>
+          <span data-i="presetL">Or start from a preset</span>
           <select id="preset"></select>
         </div>
         <div class="source" id="car-source"></div>
         <div class="fields" id="car-fields"></div>
         <div class="field" style="max-width: 320px;">
-          <span data-i="tyreL"></span>
-          <div class="row"><input type="text" id="tyre-size" placeholder="205/55 R16" style="flex:1"><button class="btn small" id="tyre-apply" data-i="use"></button></div>
+          <span data-i="tyreL">Tyre size from the sidewall</span>
+          <div class="row"><input type="text" id="tyre-size" placeholder="205/55 R16" style="flex:1"><button class="btn small" id="tyre-apply" data-i="use">Use</button></div>
         </div>
         <div class="derived" id="car-derived"></div>
         <details class="measure">
-          <summary data-i="measureT"></summary>
+          <summary data-i="measureT">Measuring it yourself with a tape</summary>
           <ol id="measure-list"></ol>
         </details>
         <div class="applybar">
           <span class="state" id="car-state"></span>
-          <button class="btn" id="car-undo" data-i="undo"></button>
-          <button class="btn primary" id="car-apply" data-i="apply"></button>
+          <button class="btn" id="car-undo" data-i="undo">Undo</button>
+          <button class="btn primary" id="car-apply" data-i="apply">Apply</button>
         </div>
       </div>
 
       <div class="tabpanel" id="p-slope" role="tabpanel" hidden>
         <div class="kv">
-          <span data-i="measuredL"></span>
+          <span data-i="measuredL">Lengths are measured</span>
           <div class="seg-ctl" role="group">
-            <button id="m-surface" data-i="mSurface"></button>
-            <button id="m-horiz" data-i="mHoriz"></button>
+            <button id="m-surface" data-i="mSurface">Along the surface</button>
+            <button id="m-horiz" data-i="mHoriz">Horizontally</button>
           </div>
         </div>
-        <p class="hint" data-i="segHint"></p>
-        <div class="seg-head"><span></span><span data-i="hLen"></span><span data-i="hAs"></span><span data-i="hVal"></span><span></span></div>
-        <div class="endcap" data-i="street"></div>
+        <p class="hint" data-i="segHint">List the pieces from the street to the garage floor. Each piece needs a length and one of: rise, angle or grade. A negative value means the garage is lower than the street.</p>
+        <div class="seg-head"><span></span><span data-i="hLen">Length m</span><span data-i="hAs">Given as</span><span data-i="hVal">Value</span><span></span></div>
+        <div class="endcap" data-i="street">Street, flat</div>
         <div class="segs" id="segs"></div>
-        <div class="endcap" data-i="garage"></div>
+        <div class="endcap" data-i="garage">Garage floor, flat</div>
         <div class="row">
-          <button class="btn small" id="add-seg" data-i="addSeg"></button>
-          <button class="btn small" id="add-bottom" data-i="addBottom"></button>
-          <button class="btn small" id="add-top" data-i="addTop"></button>
+          <button class="btn small" id="add-seg" data-i="addSeg">Add piece</button>
+          <button class="btn small" id="add-bottom" data-i="addBottom">Add easing at bottom</button>
+          <button class="btn small" id="add-top" data-i="addTop">Add easing at top</button>
         </div>
         <div class="kv">
-          <span data-i="shapeL"></span>
+          <span data-i="shapeL">Start from a shape</span>
           <div class="row">
-            <button class="btn small" id="shape-simple" data-i="shSimple"></button>
-            <button class="btn small" id="shape-eased" data-i="shEased"></button>
-            <button class="btn small" id="shape-down" data-i="shDown"></button>
+            <button class="btn small" id="shape-simple" data-i="shSimple">Single ramp</button>
+            <button class="btn small" id="shape-eased" data-i="shEased">Eased both ends</button>
+            <button class="btn small" id="shape-down" data-i="shDown">Down into basement</button>
           </div>
         </div>
         <div class="fields">
-          <label class="field"><span data-i="marginL"></span><span class="unit-wrap"><input type="number" id="margin" min="0" step="0.5"><i>cm</i></span></label>
-          <label class="field"><span data-i="headerL"></span><span class="unit-wrap"><input type="number" id="header" min="0" step="0.01" data-i-ph="off"><i>m</i></span></label>
+          <label class="field"><span data-i="marginL">Safety margin</span><span class="unit-wrap"><input type="number" id="margin" min="0" step="0.5"><i data-u="small">cm</i></span></label>
+          <label class="field"><span data-i="headerL">Door header height</span><span class="unit-wrap"><input type="number" id="header" min="0" step="0.01" data-i-ph="off" placeholder="off"><i data-u="len">m</i></span></label>
         </div>
-        <p class="hint" data-i="marginHint"></p>
+        <div class="kv">
+          <span data-i="doorAtL">Door position</span>
+          <div class="seg-ctl" role="group">
+            <button id="door-top" data-i="dTop">Top of ramp</button>
+            <button id="door-bottom" data-i="dBottom">Bottom of ramp</button>
+            <button id="door-custom" data-i="dCustom">Custom</button>
+          </div>
+        </div>
+        <label class="field" id="door-x-field" style="max-width: 260px;"><span data-i="doorXL">Distance from the street end</span><span class="unit-wrap"><input type="number" id="door-x" min="0" step="0.05"><i data-u="len">m</i></span></label>
+        <p class="hint" data-i="marginHint">The margin covers suspension dip, passengers and luggage. The header height is measured from the ground at the door; leave it empty to skip the roof check.</p>
         <div class="applybar">
           <span class="state" id="slope-state"></span>
-          <button class="btn" id="slope-undo" data-i="undo"></button>
-          <button class="btn primary" id="slope-apply" data-i="apply"></button>
+          <button class="btn" id="slope-undo" data-i="undo">Undo</button>
+          <button class="btn primary" id="slope-apply" data-i="apply">Apply</button>
         </div>
       </div>
 
       <div class="tabpanel" id="p-width" role="tabpanel" hidden>
         <div class="fields">
-          <label class="field"><span data-i="rampW"></span><span class="unit-wrap"><input type="number" id="ramp-w" min="0" step="0.01"><i>m</i></span></label>
-          <label class="field"><span data-i="doorW"></span><span class="unit-wrap"><input type="number" id="door-w" min="0" step="0.01" data-i-ph="off"><i>m</i></span></label>
+          <label class="field"><span data-i="rampW">Ramp width</span><span class="unit-wrap"><input type="number" id="ramp-w" min="0" step="0.01"><i data-u="len">m</i></span></label>
+          <label class="field"><span data-i="doorW">Door opening width</span><span class="unit-wrap"><input type="number" id="door-w" min="0" step="0.01" data-i-ph="off" placeholder="off"><i data-u="len">m</i></span></label>
         </div>
         <div class="kv">
-          <span data-i="sidesL"></span>
+          <span data-i="sidesL">Ramp sides are</span>
           <div class="seg-ctl" role="group">
-            <button id="sides-walls" data-i="walls"></button>
-            <button id="sides-curbs" data-i="curbs"></button>
+            <button id="sides-walls" data-i="walls">Walls or posts</button>
+            <button id="sides-curbs" data-i="curbs">Low curbs</button>
           </div>
         </div>
-        <p class="hint" data-i="sidesHint"></p>
-        <label class="chk"><input type="checkbox" id="fold"> <span data-i="foldL"></span></label>
+        <p class="hint" data-i="sidesHint">Mirrors pass over low curbs, so only the body width counts there. Walls catch mirrors.</p>
+        <label class="chk"><input type="checkbox" id="fold"> <span data-i="foldL">Mirrors can be folded</span></label>
         <div class="kv">
-          <span><span data-i="phiL"></span> <b class="mono" id="phi-out">0°</b></span>
+          <span><span data-i="phiL">Drive diagonally across the slope:</span> <b class="mono" id="phi-out">0°</b></span>
           <input type="range" id="phi" min="0" max="35" step="1" value="0">
         </div>
-        <p class="hint" data-i="phiHint"></p>
-        <p class="hint" data-i="widthLive"></p>
+        <p class="hint" data-i="phiHint">Crossing at an angle stretches each transition, so the car sees a gentler change, but it needs more width. The model follows the car’s centreline; in reality the wheels on each side reach the slope at slightly different times.</p>
+        <p class="hint" data-i="widthLive">Changes on this tab apply straight away.</p>
       </div>
     </section>
   </div>
 
-  <footer data-i="footer"></footer>
+  <section class="panel about" aria-labelledby="about-h">
+    <h2 id="about-h" data-i="aboutT">How Belly Check works</h2>
+    <div class="about-body" data-i="about"><div><h3>Where cars scrape</h3><p>The front bumper catches in dips, where the ramp gets steeper (approach angle). The underbody catches on crests, where it flattens out again (breakover angle). The rear bumper catches where the ramp levels out behind the car (departure angle). How sharply the slope changes matters more than the average slope.</p></div><div><h3>Measuring your ramp</h3><p>Split the ramp wherever the slope changes. For each piece, measure the length with a tape and the angle with a phone level app, or the rise with a straight edge and a spirit level. Short easing pieces at the top and bottom make a big difference, so include them.</p></div><div><h3>Reading the result</h3><p>Green clears with more than your safety margin, amber clears with less, red touches. A tight result is worth a real check: measure your own bumpers and underbody, and allow for passengers and luggage.</p></div></div>
+  </section>
+
+  <section class="feedback-row" id="feedback-row" hidden>
+    <details class="panel fb" id="fb">
+      <summary data-i="fbT">Feedback</summary>
+      <form id="fb-form" novalidate>
+        <p class="hint" data-i="fbIntro">Found a bug, a wrong preset, or a ramp you can’t describe here? Nothing about you is sent unless you add an email.</p>
+        <label class="field"><span data-i="fbMsgL">Message</span><textarea id="fb-msg" rows="4" maxlength="4000" data-i-ph="fbMsgPh" placeholder="What worked, what didn’t, which car or ramp…"></textarea></label>
+        <label class="field"><span data-i="fbEmailL">Email, only if you’d like a reply</span><input type="email" id="fb-email" autocomplete="email"></label>
+        <label class="chk"><input type="checkbox" id="fb-ctx" checked> <span data-i="fbCtx">Include my current car and ramp settings</span></label>
+        <input type="checkbox" name="botcheck" id="fb-bot" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true">
+        <div class="row"><button class="btn primary" id="fb-send" type="submit" data-i="fbSend">Send feedback</button><span class="hint" id="fb-status" role="status"></span></div>
+      </form>
+    </details>
+    <button class="btn thanks" id="thanks" type="button" hidden><svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.2 0 3.6 1.2 5.3 3.1 1.7-1.9 3.1-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z" fill="currentColor"/></svg><span id="thanks-lbl" data-i="thanks">Say thanks</span></button>
+  </section>
+
+  <footer data-i="footer">Preset and lookup figures are approximate and vary by trim, suspension and wheel size. For a tight result, measure your own car. Clearance is measured square to the ground surface.</footer>
 </div>
 
 <script id="core">
@@ -474,7 +541,17 @@ function makeSim(car, slope, phi) {
   const toTravel = u => rev ? g.WB - u : u;   // u (rear-axle frame) -> distance ahead of trailing axle
   const xs = prof.x0 - 0.5 - leadOver - g.WB;
   const xe = prof.x1 + 0.5 + trailOver;
-  const header = slope.header > 0 ? { x: prof.x1, y: prof.yTop + slope.header } : null;
+  let header = null;
+  if (slope.header > 0) {
+    let hx;
+    if (slope.doorAt === 'custom') hx = prof.x0 + Math.max(0, +slope.doorX || 0) / Math.cos(phi);
+    else {
+      const garageHigher = prof.yTop >= 0;
+      const top = garageHigher ? prof.x1 : prof.x0, bottom = garageHigher ? prof.x0 : prof.x1;
+      hx = slope.doorAt === 'bottom' ? bottom : top;
+    }
+    header = { x: hx, y: groundY(P, hx) + slope.header };
+  }
 
   function pose(xt) {
     const yt = centerY(P, xt, g.r);
@@ -554,7 +631,7 @@ const T = {
     title: 'Will my car clear the ramp?', sub: 'To-scale check of bumpers, underbody, roof and width on a garage slope.',
     thAuto: 'Auto', thLight: 'Light', thDark: 'Dark',
     side: 'Side elevation', zWhole: 'Whole ramp', zCar: 'Car', zClose: 'Close-up', vx2: '2× height',
-    play: 'Play', pause: 'Pause', replay: 'Replay', sp1: 'Creep · 8 cm/s', sp2: 'Slow · 25 cm/s', sp3: 'Walking · 60 cm/s',
+    play: 'Play', pause: 'Pause', replay: 'Replay', sp1: 'Creep', sp2: 'Slow', sp3: 'Walking', unitsMetric: 'Metric', unitsImperial: 'Imperial',
     dirFwd: 'Forwards', dirRev: 'Reversing', stopContact: 'Stop at contact', toWorst: 'Jump to tightest',
     chartT: 'Clearance along the way', chartHint: 'Tap or drag on the chart to move the car.',
     zBelly: 'Underbody', zFront: 'Front bumper', zRear: 'Rear bumper', marginL: 'Safety margin',
@@ -565,18 +642,25 @@ const T = {
     undo: 'Undo', apply: 'Apply',
     measuredL: 'Lengths are measured', mSurface: 'Along the surface', mHoriz: 'Horizontally',
     segHint: 'List the pieces from the street to the garage floor. Each piece needs a length and one of: rise, angle or grade. A negative value means the garage is lower than the street.',
-    hLen: 'Length m', hAs: 'Given as', hVal: 'Value', street: 'Street, flat', garage: 'Garage floor, flat',
+    hLen: u => 'Length ' + u, hAs: 'Given as', hVal: 'Value', street: 'Street, flat', garage: 'Garage floor, flat',
     addSeg: 'Add piece', addBottom: 'Add easing at bottom', addTop: 'Add easing at top',
     shapeL: 'Start from a shape', shSimple: 'Single ramp', shEased: 'Eased both ends', shDown: 'Down into basement',
-    headerL: 'Door header above garage floor', off: 'off',
-    marginHint: 'The margin covers suspension dip, passengers and luggage. Leave the door header empty to skip the roof check.',
+    doorAtL: 'Door position', dTop: 'Top of ramp', dBottom: 'Bottom of ramp', dCustom: 'Custom', doorXL: 'Distance from the street end',
+    aboutT: 'How Belly Check works',
+    about: '<div><h3>Where cars scrape</h3><p>The front bumper catches in dips, where the ramp gets steeper (approach angle). The underbody catches on crests, where it flattens out again (breakover angle). The rear bumper catches where the ramp levels out behind the car (departure angle). How sharply the slope changes matters more than the average slope.</p></div><div><h3>Measuring your ramp</h3><p>Split the ramp wherever the slope changes. For each piece, measure the length with a tape and the angle with a phone level app, or the rise with a straight edge and a spirit level. Short easing pieces at the top and bottom make a big difference, so include them.</p></div><div><h3>Reading the result</h3><p>Green clears with more than your safety margin, amber clears with less, red touches. A tight result is worth a real check: measure your own bumpers and underbody, and allow for passengers and luggage.</p></div>',
+    fbT: 'Feedback', fbIntro: 'Found a bug, a wrong preset, or a ramp you can’t describe here? Nothing about you is sent unless you add an email.',
+    fbMsgL: 'Message', fbMsgPh: 'What worked, what didn’t, which car or ramp…', fbEmailL: 'Email, only if you’d like a reply', fbCtx: 'Include my current car and ramp settings',
+    fbSend: 'Send feedback', fbSending: 'Sending…', fbSent: 'Sent. Thank you!', fbErr: 'Couldn’t send it. Try again later.', fbEmpty: 'Write a few words first.',
+    thanks: 'Say thanks', thanked: 'Thanks received',
+    headerL: 'Door header height', off: 'off',
+    marginHint: 'The margin covers suspension dip, passengers and luggage. The header height is measured from the ground at the door; leave it empty to skip the roof check.',
     rampW: 'Ramp width', doorW: 'Door opening width', sidesL: 'Ramp sides are', walls: 'Walls or posts', curbs: 'Low curbs',
     sidesHint: 'Mirrors pass over low curbs, so only the body width counts there. Walls catch mirrors.',
     foldL: 'Mirrors can be folded', phiL: 'Drive diagonally across the slope:',
     phiHint: 'Crossing at an angle stretches each transition, so the car sees a gentler change, but it needs more width. The model follows the car’s centreline; in reality the wheels on each side reach the slope at slightly different times.',
     widthLive: 'Changes on this tab apply straight away.',
     footer: 'Preset and lookup figures are approximate and vary by trim, suspension and wheel size. For a tight result, measure your own car. Clearance is measured square to the ground surface.',
-    rise: 'Rise m', angle: 'Angle °', grade: 'Grade %',
+    rise: u => 'Rise ' + u, angle: 'Angle °', grade: 'Grade %',
     errRise: 'Rise must be shorter than the length', errSteep: 'Steeper than 69° is not a ramp', errZero: 'Length is zero',
     over: 'over', removePiece: 'Remove piece',
     st_go: 'Clears', st_warn: 'Tight', st_stop: 'Won’t fit', verdict: 'Verdict',
@@ -588,22 +672,22 @@ const T = {
     place: (k, a, b) => `at the ${k} where ${a} meets ${b}`,
     hGo: (z, c) => `Tightest point is the ${z} with ${c} to spare.`,
     hScrape: (z, p) => `The ${z} scrapes ${p}.`,
-    hTight: (z, c, m) => `Only ${c} under the ${z}, less than your ${m} cm margin.`,
+    hTight: (z, c, m) => `Only ${c} under the ${z}, less than your ${m} margin.`,
     travelled: 'Travelled', pitch: 'Car pitch', tightNow: 'Tightest now', roofHead: 'Roof to header',
-    contact: (z, p, d) => `First contact: the ${z} touches ${p}, after ${d} m. Press Play to push on and see how deep it goes.`,
+    contact: (z, p, d) => `First contact: the ${z} touches ${p}, after ${d}. Press Play to push on and see how deep it goes.`,
     onRamp: phi => `On the ramp${phi ? ' at ' + phi + '°' : ''}`, throughDoor: 'Through the door, straight',
-    needs: (n, h) => `needs <b class="mono">${n} m</b> of <b class="mono">${h} m</b>`,
+    needs: (n, h) => `needs <b class="mono">${n}</b> of <b class="mono">${h}</b>`,
     sideOk: c => `${c} each side`, sideShort: c => `short by ${c}`,
     diag: (phi, pct, a, b) => `At ${phi}° every transition is ${pct} % longer, so the steepest piece feels like ${a} % instead of ${b} %.`,
     enterWidth: 'Enter a ramp or door width to check it.',
-    planBody: (b, m) => `body ${b} m · mirrors ${m} m`,
+    planBody: (b, m) => `body ${b} · mirrors ${m}`,
     doorLbl: 'door', rampLbl: 'ramp', headerLbl: 'door header', height2: 'height ×2',
     applied: 'Showing what’s applied', pending: 'Unapplied changes', undoneTo: 'Undo restores the previous version',
     srcClaude: (n, notes) => `<b>${n}</b> · from Claude’s knowledge, not a live web lookup. Dashed fields are estimates.${notes ? ' ' + notes : ''}`,
     srcPreset: (n, note) => `<b>${n}</b> · preset with approximate figures${note ? ' (' + note + ')' : ''}. Dashed fields are estimates; bumper heights come from approach and departure angles.`,
     srcManual: n => `<b>${n}</b> · your own figures. Dashed fields are still estimates.`,
     edited: ', edited', yourCar: 'Your car', est: 'est.',
-    derived: (ro, bo, r) => `Rear overhang <b>${ro} mm</b> · approx. breakover angle <b>${bo}°</b> · tyre radius <b>${r} mm</b>`,
+    derived: (ro, bo, r) => `Rear overhang <b>${ro}</b> · approx. breakover angle <b>${bo}°</b> · tyre radius <b>${r}</b>`,
     roWarn: 'Check length, wheelbase and front overhang: the rear overhang looks too short.',
     lkIdle: 'Asks Claude for factory dimensions. Bumper heights are derived from approach angles, so measure them if it’s tight.',
     lkNone: 'Lookup works when this page is opened in Claude. Use a preset or your own measurements.',
@@ -632,7 +716,7 @@ const T = {
     title: 'Átjut az autó a rámpán?', sub: 'Méretarányos ellenőrzés: lökhárítók, alváz, tető és szélesség a garázslejtőn.',
     thAuto: 'Auto', thLight: 'Világos', thDark: 'Sötét',
     side: 'Oldalnézet', zWhole: 'Teljes rámpa', zCar: 'Autó', zClose: 'Közeli', vx2: '2× magasság',
-    play: 'Indít', pause: 'Szünet', replay: 'Újra', sp1: 'Araszolás · 8 cm/s', sp2: 'Lassú · 25 cm/s', sp3: 'Lépésben · 60 cm/s',
+    play: 'Indít', pause: 'Szünet', replay: 'Újra', sp1: 'Araszolás', sp2: 'Lassú', sp3: 'Lépésben', unitsMetric: 'Metrikus', unitsImperial: 'Angolszász',
     dirFwd: 'Előre', dirRev: 'Tolatva', stopContact: 'Megáll érintkezéskor', toWorst: 'Ugrás a legszorosabbra',
     chartT: 'Szabad távolság az út mentén', chartHint: 'Koppints vagy húzd az ujjad a grafikonon az autó mozgatásához.',
     zBelly: 'Alváz', zFront: 'Első lökhárító', zRear: 'Hátsó lökhárító', marginL: 'Biztonsági ráhagyás',
@@ -643,18 +727,25 @@ const T = {
     undo: 'Visszavon', apply: 'Alkalmaz',
     measuredL: 'A hosszakat így mérted', mSurface: 'A felület mentén', mHoriz: 'Vízszintesen',
     segHint: 'Sorold fel a szakaszokat az utcától a garázspadlóig. Mindegyikhez kell egy hossz és egy érték: emelkedés, szög vagy meredekség. Negatív érték: a garázs lejjebb van az utcánál.',
-    hLen: 'Hossz m', hAs: 'Megadás', hVal: 'Érték', street: 'Utca, sík', garage: 'Garázspadló, sík',
+    hLen: u => 'Hossz ' + u, hAs: 'Megadás', hVal: 'Érték', street: 'Utca, sík', garage: 'Garázspadló, sík',
     addSeg: 'Új szakasz', addBottom: 'Átmenet alul', addTop: 'Átmenet felül',
     shapeL: 'Kiinduló forma', shSimple: 'Egyszerű rámpa', shEased: 'Átmenetekkel', shDown: 'Le a mélygarázsba',
-    headerL: 'Kapuszemöldök a padló fölött', off: 'nincs',
-    marginHint: 'A ráhagyás fedezi a rugózást, az utasokat és a csomagot. Ha nincs kapuszemöldök, hagyd üresen.',
+    doorAtL: 'A kapu helye', dTop: 'Rámpa teteje', dBottom: 'Rámpa alja', dCustom: 'Egyedi', doorXL: 'Távolság az utcai végtől',
+    aboutT: 'Hogyan működik a Belly Check',
+    about: '<div><h3>Hol akad fel az autó</h3><p>Az első lökhárító a homorú töréseknél akad el, ahol a rámpa meredekebb lesz (terepszög elöl). Az alváz a domború töréseknél ül fel, ahol újra laposodik (rámpaszög). A hátsó lökhárító ott akad, ahol a rámpa az autó mögött kisimul (terepszög hátul). A lejtés változásának élessége többet számít, mint az átlagos meredekség.</p></div><div><h3>A rámpa lemérése</h3><p>Bontsd szakaszokra a rámpát ott, ahol a lejtés változik. Minden szakasznál mérd le a hosszt mérőszalaggal, a szöget telefonos vízmérték-alkalmazással, vagy az emelkedést léccel és vízmértékkel. A rövid átmeneti szakaszok alul és felül sokat számítanak, ezért ne hagyd ki őket.</p></div><div><h3>Az eredmény</h3><p>Zöld: a biztonsági ráhagyásnál többel átfér. Sárga: átfér, de kevesebbel. Piros: hozzáér. Szoros eredménynél érdemes valóban lemérni a saját autó lökhárítóit és alvázát, és számolni az utasokkal, csomaggal.</p></div>',
+    fbT: 'Visszajelzés', fbIntro: 'Hibát találtál, rossz a minta, vagy nem tudod leírni a rámpádat? Rólad semmit nem küld el, hacsak nem adsz meg e-mail-címet.',
+    fbMsgL: 'Üzenet', fbMsgPh: 'Mi működött, mi nem, melyik autó vagy rámpa…', fbEmailL: 'E-mail, csak ha választ kérsz', fbCtx: 'Az aktuális autó- és rámpaadatok csatolása',
+    fbSend: 'Küldés', fbSending: 'Küldés…', fbSent: 'Elküldve. Köszönöm!', fbErr: 'Nem sikerült elküldeni. Próbáld később.', fbEmpty: 'Írj előbb pár szót.',
+    thanks: 'Köszönöm', thanked: 'Köszönet elküldve',
+    headerL: 'Kapuszemöldök magassága', off: 'nincs',
+    marginHint: 'A ráhagyás fedezi a rugózást, az utasokat és a csomagot. A kapuszemöldök magasságát a kapunál lévő talajtól mérd; ha nincs, hagyd üresen.',
     rampW: 'Rámpa szélessége', doorW: 'Kapunyílás szélessége', sidesL: 'A rámpa szélén', walls: 'Fal vagy oszlop', curbs: 'Alacsony szegély',
     sidesHint: 'Alacsony szegély fölött a tükör átfér, ott csak a karosszéria szélessége számít. Falnál a tükör is.',
     foldL: 'A tükrök behajthatók', phiL: 'Átlósan a lejtőn:',
     phiHint: 'Ferdén hajtva a törések hosszabbak, így enyhébbnek érzi az autó, viszont szélesebb hely kell. A modell az autó középvonalát követi; a valóságban a két oldal kerekei kicsit eltérő időben érik el a törést.',
     widthLive: 'Ezen a fülön a módosítás azonnal érvényes.',
     footer: 'A minták és a keresés adatai közelítők, felszereltségtől, futóműtől és kerékmérettől függnek. Szoros eredménynél mérd le a saját autódat. A távolságot a talajfelületre merőlegesen méri.',
-    rise: 'Emelés m', angle: 'Szög °', grade: 'Lejtés %',
+    rise: u => 'Emelés ' + u, angle: 'Szög °', grade: 'Lejtés %',
     errRise: 'Az emelkedés nem lehet nagyobb a hossznál', errSteep: '69°-nál meredekebb nem rámpa', errZero: 'A hossz nulla',
     over: 'vízszintesen', removePiece: 'Szakasz törlése',
     st_go: 'Átfér', st_warn: 'Szoros', st_stop: 'Nem fér át', verdict: 'Eredmény',
@@ -666,22 +757,22 @@ const T = {
     place: (k, a, b) => `a ${k} törésnél (${a} → ${b})`,
     hGo: (z, c) => `A legszorosabb pont: ${z}, ${c} tartalékkal.`,
     hScrape: (z, p) => `Felakad: ${z}, ${p}.`,
-    hTight: (z, c, m) => `Csak ${c} marad (${z}), kevesebb a ${m} cm-es ráhagyásnál.`,
+    hTight: (z, c, m) => `Csak ${c} marad (${z}), kevesebb a ${m} ráhagyásnál.`,
     travelled: 'Megtett út', pitch: 'Dőlés', tightNow: 'Most legszorosabb', roofHead: 'Tető–szemöldök',
-    contact: (z, p, d) => `Első érintkezés: ${z}, ${p}, ${d} m után. Az Indítással megnézheted, mennyire akad bele.`,
+    contact: (z, p, d) => `Első érintkezés: ${z}, ${p}, ${d} után. Az Indítással megnézheted, mennyire akad bele.`,
     onRamp: phi => `A rámpán${phi ? ', ' + phi + '°-ban' : ''}`, throughDoor: 'A kapun egyenesen',
-    needs: (n, h) => `<b class="mono">${n} m</b> kell, van <b class="mono">${h} m</b>`,
+    needs: (n, h) => `<b class="mono">${n}</b> kell, van <b class="mono">${h}</b>`,
     sideOk: c => `oldalanként ${c}`, sideShort: c => `${c} hiányzik`,
     diag: (phi, pct, a, b) => `${phi}°-ban minden törés ${pct} %-kal hosszabb, így a legmeredekebb szakasz ${b} % helyett ${a} %-nak hat.`,
     enterWidth: 'Add meg a rámpa vagy a kapu szélességét.',
-    planBody: (b, m) => `karosszéria ${b} m · tükrökkel ${m} m`,
+    planBody: (b, m) => `karosszéria ${b} · tükrökkel ${m}`,
     doorLbl: 'kapu', rampLbl: 'rámpa', headerLbl: 'kapuszemöldök', height2: 'magasság ×2',
     applied: 'Az alkalmazott állapot látható', pending: 'Nem alkalmazott módosítások', undoneTo: 'Visszavon: előző változat',
     srcClaude: (n, notes) => `<b>${n}</b> · Claude tudásából, nem élő webes keresés. A szaggatott mezők becslések.${notes ? ' ' + notes : ''}`,
     srcPreset: (n, note) => `<b>${n}</b> · minta, közelítő adatokkal${note ? ' (' + note + ')' : ''}. A szaggatott mezők becslések; a lökhárítók magassága a terepszögekből számolt.`,
     srcManual: n => `<b>${n}</b> · saját adatok. A szaggatott mezők még becslések.`,
     edited: ', módosítva', yourCar: 'Saját autó', est: 'becsült',
-    derived: (ro, bo, r) => `Hátsó túlnyúlás <b>${ro} mm</b> · kb. rámpaszög <b>${bo}°</b> · gumi sugara <b>${r} mm</b>`,
+    derived: (ro, bo, r) => `Hátsó túlnyúlás <b>${ro}</b> · kb. rámpaszög <b>${bo}°</b> · gumi sugara <b>${r}</b>`,
     roWarn: 'Ellenőrizd a hosszt, a tengelytávot és az első túlnyúlást: a hátsó túlnyúlás túl rövidnek tűnik.',
     lkIdle: 'Claude-tól kéri le a gyári méreteket. A lökhárítók magassága a terepszögekből számolt, szoros esetben mérd le.',
     lkNone: 'A keresés akkor működik, ha az oldalt a Claude-ban nyitod meg. Használj mintát vagy saját mérést.',
@@ -710,7 +801,26 @@ const T = {
 let lang = 'en';
 const t = (k, ...a) => { const v = (T[lang][k] ?? T.en[k]); return typeof v === 'function' ? v(...a) : v; };
 const num = (x, d = 1) => { const s = (+x).toFixed(d); return (lang === 'hu' ? s.replace('.', ',') : s).replace(/^-0([.,]0+)?$/, '0$1'); };
-const fmtCm = m => num(m * 100, 1) + ' cm';
+let units = 'metric';
+const IMP = () => units === 'imperial';
+const carUnit = () => IMP() ? 'in' : 'mm', lenUnit = () => IMP() ? 'ft' : 'm', smallUnit = () => IMP() ? 'in' : 'cm';
+const carToDisp = mm => IMP() ? +(mm / 25.4).toFixed(1) : Math.round(mm), carFromDisp = v => IMP() ? v * 25.4 : v;
+const lenToDisp = m => IMP() ? +(m / 0.3048).toFixed(2) : +(+m).toFixed(3), lenFromDisp = v => IMP() ? v * 0.3048 : v;
+const smallToDisp = cm => IMP() ? +(cm / 2.54).toFixed(2) : cm, smallFromDisp = v => IMP() ? v * 2.54 : v;
+const lenVal = m => IMP() ? m / 0.3048 : m;
+const fmtCm = m => IMP() ? num(m / 0.0254, 1) + ' in' : num(m * 100, 1) + ' cm';
+const fmtLen = (m, d = 2) => num(lenVal(m), d) + ' ' + lenUnit();
+const fmtMm = mm => IMP() ? num(mm / 25.4, 1) + ' in' : num(mm, 0) + ' mm';
+const fmtSmall = cm => (IMP() ? num(cm / 2.54, 1) : num(cm, 1)).replace(/[.,]0$/, '') + ' ' + smallUnit();
+const fmtSpeed = v => IMP() ? (v < 0.3 ? Math.round(v / 0.0254) + ' in/s' : num(v / 0.3048, 1) + ' ft/s') : Math.round(v * 100) + ' cm/s';
+function detectUnits() {
+  // US time zones (and Liberia) default to imperial; everyone else metric. No location permission needed.
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    if (tz) return /^(America\/(New_York|Chicago|Denver|Los_Angeles|Phoenix|Anchorage|Detroit|Boise|Juneau|Sitka|Nome|Adak|Yakutat|Metlakatla|Menominee|Indiana\/.+|Kentucky\/.+|North_Dakota\/.+)|Pacific\/Honolulu|Africa\/Monrovia|US\/.+)$/.test(tz) ? 'imperial' : 'metric';
+  } catch (e) {}
+  return 'metric';
+}
 const sCm = m => (m < 0 ? '−' : '') + fmtCm(Math.abs(m));
 const esc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]);
 const clone = o => JSON.parse(JSON.stringify(o));
@@ -746,12 +856,13 @@ const SHAPES = {
 };
 const DEFAULT = {
   car: presetCar('golf8'),
-  slope: { measure: 'surface', segs: clone(SHAPES.eased), margin: 3, header: 2.1 },
+  slope: { measure: 'surface', segs: clone(SHAPES.eased), margin: 3, header: 2.1, doorAt: 'top', doorX: 0 },
   drive: 'fwd',
   width: { ramp: 2.8, door: 2.3, sides: 'walls', fold: false, phi: 0 },
   view: { zoom: 'car', vx: 1 },
   lang: 'en',
   theme: 'auto',
+  units: null,
 };
 let state = null;
 try { const s = JSON.parse(localStorage.getItem('rampcheck.v2') || localStorage.getItem('rampcheck.v1') || 'null'); if (s && s.car && s.slope) state = s; } catch (e) {}
@@ -761,6 +872,10 @@ if (!state.drive) state.drive = state.slope.dir === 'rev' ? 'rev' : 'fwd';
 delete state.slope.dir;
 if (!state.lang) state.lang = DEFAULT.lang;
 if (!state.theme) state.theme = 'auto';
+if (!state.units) state.units = detectUnits();
+units = state.units;
+if (!state.slope.doorAt) state.slope.doorAt = 'top';
+if (state.slope.doorX == null) state.slope.doorX = 0;
 lang = state.lang;
 function save() { try { localStorage.setItem('rampcheck.v2', JSON.stringify(state)); } catch (e) {} }
 
@@ -838,7 +953,7 @@ function updateKpis() {
   const worst = tiles.reduce((a, b) => rank[b.c] > rank[a.c] ? b : a, tiles[0]);
   let text;
   if (worst.c === 'go') text = t('hGo', zone(w.zone), fmtCm(w.min));
-  else if (worst === tiles[0]) text = w.min < 0 ? t('hScrape', zone(w.zone), placeOf(w.pt[0])) : t('hTight', zone(w.zone), fmtCm(w.min), num(state.slope.margin, 1).replace(/[.,]0$/, ''));
+  else if (worst === tiles[0]) text = w.min < 0 ? t('hScrape', zone(w.zone), placeOf(w.pt[0])) : t('hTight', zone(w.zone), fmtCm(w.min), fmtSmall(state.slope.margin));
   else text = `${worst.lbl}: ${worst.val} ${worst.word}.`;
   const overall = `<div class="kpi overall ${worst.c}"><div class="k-head"><span class="k-lbl">${t('verdict')}</span><span class="k-note">${esc(state.car.name || '')}</span></div><div class="k-val sig">${t('st_' + worst.c)}</div><div class="k-text">${esc(text)}</div></div>`;
   $('#kpis').innerHTML = overall + tiles.map(k => `<div class="kpi ${k.c}"><div class="k-head"><span class="k-lbl">${k.lbl}</span><span class="pill">${t('st_' + k.c)}</span></div><div class="k-val sig">${k.val}</div><div class="k-word">${k.word}</div><div class="k-note">${esc(k.note)}</div></div>`).join('');
@@ -849,14 +964,14 @@ function updateWidth() {
     const c = wc.side < 0 ? 'var(--stop)' : wc.side < 0.1 ? 'var(--warn)' : 'var(--go)';
     const res = wc.side < 0 ? t('sideShort', fmtCm(-wc.side * 2)) : t('sideOk', fmtCm(wc.side));
     const head = wc.key === 'ramp' ? t('onRamp', W.phi) : t('throughDoor');
-    parts.push(`<div>${head}: ${t('needs', num(wc.need, 2), num(wc.have, 2))} → <b class="mono" style="color:${c}">${res}</b></div>`);
+    parts.push(`<div>${head}: ${t('needs', fmtLen(wc.need), fmtLen(wc.have))} → <b class="mono" style="color:${c}">${res}</b></div>`);
   }
   if (W.phi > 0) {
     const s = sim.prof.segInfo, stretch = 1 / Math.cos(W.phi * Math.PI / 180), mx = Math.max(...s.map(x => Math.abs(x.grade)));
     parts.push(`<div class="hint">${t('diag', W.phi, num((stretch - 1) * 100, 0), num(mx / stretch * 100, 1), num(mx * 100, 1))}</div>`);
   }
   $('#width-out').innerHTML = parts.join('') || `<div class="hint">${t('enterWidth')}</div>`;
-  $('#plan-hint').textContent = t('planBody', num(g.W, 2), num(g.Wm, 2));
+  $('#plan-hint').textContent = t('planBody', fmtLen(g.W), fmtLen(g.Wm));
 }
 
 // ---------- drawing ----------
@@ -893,7 +1008,7 @@ function drawSide(col) {
   const xa = midX - w / 2 / s, xb = midX + w / 2 / s;
   // grid (1 m)
   ctx.strokeStyle = col.rule; ctx.lineWidth = 1; ctx.globalAlpha = 0.6;
-  const gstep = state.view.zoom === 'close' ? 0.1 : 1;
+  const gstep = state.view.zoom === 'close' ? (IMP() ? 0.0508 : 0.1) : (IMP() ? 0.3048 : 1);
   for (let gx = Math.ceil(xa / gstep) * gstep; gx < xb; gx += gstep) { ctx.beginPath(); ctx.moveTo(X(gx), 0); ctx.lineTo(X(gx), h); ctx.stroke(); }
   ctx.globalAlpha = 1;
   // ground
@@ -915,7 +1030,7 @@ function drawSide(col) {
     for (let i = 1; i < P.length - 1; i++) {
       const [x, y] = P[i]; if (X(x) < 24 || X(x) > w - 24) continue;
       ctx.strokeStyle = col.muted; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(X(x), Y(y)); ctx.lineTo(X(x), Y(y) + 6); ctx.stroke();
-      ctx.fillText('0+' + num(x - sim.prof.x0, 2).padStart(5, '0'), X(x), h - 6);
+      ctx.fillText('0+' + num(lenVal(x - sim.prof.x0), 2).padStart(5, '0'), X(x), h - 6);
     }
   }
   if (sim.header && X(sim.header.x) > -40 && X(sim.header.x) < w + 40) {
@@ -947,10 +1062,13 @@ function drawSide(col) {
   const lbl = sCm(e.min), ly = Math.min(h - 22, Y(groundY(P, mx)) + 18), tw = ctx.measureText(lbl).width + 10;
   ctx.fillStyle = col.panel; ctx.fillRect(X(mx) - tw / 2, ly - 12, tw, 16); ctx.strokeStyle = mc; ctx.lineWidth = 1; ctx.strokeRect(X(mx) - tw / 2, ly - 12, tw, 16);
   ctx.fillStyle = mc; ctx.fillText(lbl, X(mx), ly);
-  const barM = state.view.zoom === 'close' ? 0.1 : 1;
+  const isClose = state.view.zoom === 'close';
+  const barM = isClose ? (IMP() ? 0.1016 : 0.1) : (IMP() ? 0.9144 : 1), barL = isClose ? (IMP() ? '4 in' : '10 cm') : (IMP() ? '3 ft' : '1 m');
   ctx.strokeStyle = col.ink; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(12, 14); ctx.lineTo(12 + barM * s, 14); ctx.stroke();
-  ctx.fillStyle = col.ink; ctx.textAlign = 'left'; ctx.font = '500 11px "IBM Plex Mono", monospace';
-  ctx.fillText((barM === 1 ? '1 m' : '10 cm') + (vx > 1 ? ' · ' + t('height2') : ''), 16 + barM * s, 18);
+  ctx.textAlign = 'left'; ctx.font = '500 11px "IBM Plex Mono", monospace';
+  const sbl = barL + (vx > 1 ? ' · ' + t('height2') : ''), sbw = ctx.measureText(sbl).width;
+  ctx.fillStyle = col.inset; ctx.fillRect(13 + barM * s, 7, sbw + 6, 15);
+  ctx.fillStyle = col.ink; ctx.fillText(sbl, 16 + barM * s, 18);
 }
 
 function drawChart(col) {
@@ -965,14 +1083,17 @@ function drawChart(col) {
   const X = x => L + (x - sim.xs) / (sim.xe - sim.xs) * (w - L - R);
   const Y = v => T0 + (hi - Math.max(lo, Math.min(hi, v))) / (hi - lo) * (h - T0 - B);
   ctx.font = '500 10px "IBM Plex Mono", monospace'; ctx.fillStyle = col.muted; ctx.textAlign = 'right';
-  const stepCm = (hi - lo) > 0.35 ? 10 : 5;
-  for (let v = Math.ceil(lo * 100 / stepCm) * stepCm; v <= hi * 100; v += stepCm) {
-    ctx.strokeStyle = col.rule; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(L, Y(v / 100)); ctx.lineTo(w - R, Y(v / 100)); ctx.stroke();
-    ctx.fillText(v + ' cm', L - 4, Y(v / 100) + 3);
+  const uS = IMP() ? 0.0254 : 0.01, uN = IMP() ? ' in' : ' cm';
+  const stepU = IMP() ? ((hi - lo) > 0.35 ? 4 : 2) : ((hi - lo) > 0.35 ? 10 : 5);
+  for (let v = Math.ceil(lo / uS / stepU) * stepU; v * uS <= hi + 1e-9; v += stepU) {
+    const vm = v * uS;
+    ctx.strokeStyle = col.rule; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(L, Y(vm)); ctx.lineTo(w - R, Y(vm)); ctx.stroke();
+    ctx.fillText(v + uN, L - 4, Y(vm) + 3);
   }
   ctx.textAlign = 'center';
-  const every = (w - L - R) / (sim.xe - sim.xs) < 45 ? 2 : 1;
-  for (let d = 0; d <= sim.xe - sim.xs; d += every) ctx.fillText(d + ' m', X(sim.xs + d), h - 6);
+  const xu = IMP() ? 0.3048 : 1, xn = IMP() ? ' ft' : ' m', pxPer = (w - L - R) / (sim.xe - sim.xs) * xu;
+  const every = IMP() ? (pxPer < 15 ? 10 : 5) : (pxPer < 45 ? 2 : 1);
+  for (let d = 0; d * xu <= sim.xe - sim.xs; d += every) ctx.fillText(d + xn, X(sim.xs + d * xu), h - 6);
   ctx.fillStyle = col.stop; ctx.globalAlpha = 0.1; ctx.fillRect(L, Y(0), w - L - R, Y(lo) - Y(0)); ctx.globalAlpha = 1;
   ctx.strokeStyle = col.stop; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(L, Y(0)); ctx.lineTo(w - R, Y(0)); ctx.stroke();
   ctx.setLineDash([4, 4]); ctx.strokeStyle = col.warn; ctx.beginPath(); ctx.moveTo(L, Y(margin)); ctx.lineTo(w - R, Y(margin)); ctx.stroke(); ctx.setLineDash([]);
@@ -1006,7 +1127,7 @@ function drawPlan(col) {
     ctx.fillRect(X(doorX), 0, 0.2 * s, Y(W.door / 2));
     ctx.fillRect(X(doorX), Y(-W.door / 2), 0.2 * s, h - Y(-W.door / 2));
     ctx.font = '500 11px "IBM Plex Mono", monospace'; ctx.fillStyle = col.muted; ctx.textAlign = 'right';
-    ctx.fillText(t('doorLbl') + ' ' + num(W.door, 2) + ' m', X(doorX) - 4, Math.max(12, Y(W.door / 2) - 4));
+    ctx.fillText(t('doorLbl') + ' ' + fmtLen(W.door), X(doorX) - 4, Math.max(12, Y(W.door / 2) - 4));
   }
   const drawCar = (cx, ang, ghost) => {
     ctx.save(); ctx.translate(X(cx), Y(0)); ctx.rotate(-ang);
@@ -1022,13 +1143,13 @@ function drawPlan(col) {
   };
   if (W.door > 0) drawCar(doorX - g.L / 2 - 0.05, 0, true);
   drawCar(-g.L * 0.45, phi, false);
-  if (W.ramp > 0) { ctx.font = '500 11px "IBM Plex Mono", monospace'; ctx.fillStyle = col.ink; ctx.textAlign = 'left'; ctx.fillText(t('rampLbl') + ' ' + num(corr, 2) + ' m', X(-spanX / 2) + 6, Y(corr / 2) + 14); }
+  if (W.ramp > 0) { ctx.font = '500 11px "IBM Plex Mono", monospace'; ctx.fillStyle = col.ink; ctx.textAlign = 'left'; ctx.fillText(t('rampLbl') + ' ' + fmtLen(corr), X(-spanX / 2) + 6, Y(corr / 2) + 14); }
 }
 
 function updateReadout() {
   const e = sim.evalAt(pos), margin = (state.slope.margin || 0) / 100;
   const c = e.min < 0 ? 'var(--stop)' : e.min < margin ? 'var(--warn)' : 'var(--go)';
-  $('#readout').innerHTML = `<span>${t('travelled')} <b>${num(pos - sim.xs, 2)} m</b></span><span>${t('pitch')} <b>${num(e.pose.a * 180 / Math.PI, 1)}°</b></span><span>${t('tightNow')} <b style="color:${c}">${zone(e.minZone)} ${sCm(e.min)}</b></span>` + (e.head != null ? `<span>${t('roofHead')} <b>${sCm(e.head)}</b></span>` : '');
+  $('#readout').innerHTML = `<span>${t('travelled')} <b>${fmtLen(pos - sim.xs)}</b></span><span>${t('pitch')} <b>${num(e.pose.a * 180 / Math.PI, 1)}°</b></span><span>${t('tightNow')} <b style="color:${c}">${zone(e.minZone)} ${sCm(e.min)}</b></span>` + (e.head != null ? `<span>${t('roofHead')} <b>${sCm(e.head)}</b></span>` : '');
 }
 function syncScrub() { $('#scrub').value = Math.round((pos - sim.xs) / (sim.xe - sim.xs) * 1000); }
 function updatePlayLabel() { $('#play').textContent = playing ? t('pause') : (pos >= sim.xe - 1e-6 ? t('replay') : t('play')); }
@@ -1046,7 +1167,7 @@ function tick(now) {
   const e = sim.evalAt(pos);
   if ($('#stop-contact').checked && e.min < 0 && lastClear != null && lastClear >= 0) {
     playing = false; draw();
-    const m = $('#contact-msg'); m.hidden = false; m.textContent = t('contact', zone(e.minZone), placeOf(e.minPt[0]), num(pos - sim.xs, 2));
+    const m = $('#contact-msg'); m.hidden = false; m.textContent = t('contact', zone(e.minZone), placeOf(e.minPt[0]), fmtLen(pos - sim.xs));
     lastClear = e.min; return;
   }
   lastClear = e.min;
@@ -1062,7 +1183,7 @@ function renderCarFields() {
   const F = T[lang].fields;
   $('#car-fields').innerHTML = FIELD_KEYS.map(k => {
     const changed = +car[k] !== +applied[k];
-    return `<label class="field${est.has(k) ? ' est' : ''}${changed ? ' changed' : ''}" title="${esc(F[k][1])}"><span>${F[k][0]}${est.has(k) ? `<b class="tag">${t('est')}</b>` : ''}</span><span class="unit-wrap"><input type="number" id="car-${k}" data-k="${k}" min="0" step="1" value="${car[k] ?? ''}"><i>mm</i></span></label>`;
+    return `<label class="field${est.has(k) ? ' est' : ''}${changed ? ' changed' : ''}" title="${esc(F[k][1])}"><span>${F[k][0]}${est.has(k) ? `<b class="tag">${t('est')}</b>` : ''}</span><span class="unit-wrap"><input type="number" id="car-${k}" data-k="${k}" min="0" step="${IMP() ? 0.1 : 1}" value="${car[k] == null ? '' : carToDisp(car[k])}"><i>${carUnit()}</i></span></label>`;
   }).join('');
   renderCarSource();
 }
@@ -1073,11 +1194,11 @@ function renderCarSource() {
 function updateDerived() {
   const g = carGeom(draft.car);
   const bo = 2 * Math.atan(g.gc / (g.WB / 2)) * 180 / Math.PI;
-  $('#car-derived').innerHTML = t('derived', num(g.ro * 1000, 0), num(bo, 1), num(g.r * 1000, 0)) + (g.ro < 0.4 ? ` <span style="color:var(--stop)">${t('roWarn')}</span>` : '');
+  $('#car-derived').innerHTML = t('derived', fmtMm(g.ro * 1000), num(bo, 1), fmtMm(g.r * 1000)) + (g.ro < 0.4 ? ` <span style="color:var(--stop)">${t('roWarn')}</span>` : '');
 }
 $('#car-fields').addEventListener('input', ev => {
   const k = ev.target.dataset.k; if (!k) return;
-  draft.car[k] = +ev.target.value;
+  draft.car[k] = carFromDisp(+ev.target.value);
   draft.car.est = (draft.car.est || []).filter(x => x !== k);
   const f = ev.target.closest('.field'); f.classList.remove('est'); const tg = f.querySelector('.tag'); if (tg) tg.remove();
   f.classList.toggle('changed', +draft.car[k] !== +state.car[k]);
@@ -1158,11 +1279,11 @@ function renderSegs() {
   $('#segs').innerHTML = segs.map((s, i) => `
     <div class="seg" data-i="${i}">
       <span class="n">${i + 1}</span>
-      <input type="number" id="seg-len-${i}" data-f="len" step="0.05" min="0" value="${s.len}" aria-label="${t('hLen')} ${i + 1}">
+      <input type="number" id="seg-len-${i}" data-f="len" step="0.05" min="0" value="${lenToDisp(s.len)}" aria-label="${t('hLen', lenUnit())} ${i + 1}">
       <select id="seg-mode-${i}" data-f="mode" aria-label="${t('hAs')} ${i + 1}">
-        ${['rise', 'angle', 'grade'].map(m => `<option value="${m}"${s.mode === m ? ' selected' : ''}>${t(m)}</option>`).join('')}
+        ${['rise', 'angle', 'grade'].map(m => `<option value="${m}"${s.mode === m ? ' selected' : ''}>${t(m, lenUnit())}</option>`).join('')}
       </select>
-      <input type="number" id="seg-val-${i}" data-f="val" step="0.1" value="${s.val}" aria-label="${t('hVal')} ${i + 1}">
+      <input type="number" id="seg-val-${i}" data-f="val" step="0.1" value="${s.mode === 'rise' ? lenToDisp(s.val) : s.val}" aria-label="${t('hVal')} ${i + 1}">
       <button class="btn icon small" data-del="${i}" aria-label="${t('removePiece')} ${i + 1}" ${segs.length < 2 ? 'disabled' : ''}>×</button>
       <span class="calc" id="seg-calc-${i}"></span>
     </div>`).join('');
@@ -1175,7 +1296,7 @@ function updateSegCalcs() {
     if (d.err) { el.className = 'calc err'; el.textContent = t(ERR[d.err]); return; }
     const g = d.dy / d.dx;
     el.className = 'calc';
-    el.textContent = `${num(g * 100, 1)} % · ${num(Math.atan(g) * 180 / Math.PI, 1)}° · ${d.dy >= 0 ? '+' : '−'}${num(Math.abs(d.dy), 2)} m / ${num(d.dx, 2)} m ${t('over')}`;
+    el.textContent = `${num(g * 100, 1)} % · ${num(Math.atan(g) * 180 / Math.PI, 1)}° · ${d.dy >= 0 ? '+' : '−'}${fmtLen(Math.abs(d.dy))} / ${fmtLen(d.dx)} ${t('over')}`;
   });
 }
 $('#segs').addEventListener('input', ev => {
@@ -1184,8 +1305,8 @@ $('#segs').addEventListener('input', ev => {
   if (f === 'mode') {
     const d = segDelta(seg, draft.slope.measure), g = d.dy / d.dx, nm = ev.target.value;
     seg.val = nm === 'rise' ? +d.dy.toFixed(3) : nm === 'angle' ? +(Math.atan(g) * 180 / Math.PI).toFixed(2) : +(g * 100).toFixed(2);
-    seg.mode = nm; document.getElementById('seg-val-' + i).value = seg.val;
-  } else seg[f] = +ev.target.value;
+    seg.mode = nm; document.getElementById('seg-val-' + i).value = nm === 'rise' ? lenToDisp(seg.val) : seg.val;
+  } else seg[f] = (f === 'len' || seg.mode === 'rise') ? lenFromDisp(+ev.target.value) : +ev.target.value;
   draftChanged();
 });
 $('#segs').addEventListener('keydown', e => { if (e.key === 'Enter') applyDraft('slope'); });
@@ -1195,28 +1316,37 @@ const easing = ref => { const d = segDelta(ref, draft.slope.measure), g = d.dy /
 $('#add-bottom').addEventListener('click', () => { draft.slope.segs.unshift(easing(draft.slope.segs[0])); renderSegs(); draftChanged(); });
 $('#add-top').addEventListener('click', () => { draft.slope.segs.push(easing(draft.slope.segs[draft.slope.segs.length - 1])); renderSegs(); draftChanged(); });
 for (const k of ['simple', 'eased', 'down']) $('#shape-' + k).addEventListener('click', () => { draft.slope.segs = clone(SHAPES[k]); draft.slope.measure = 'surface'; syncToggles(); renderSegs(); draftChanged(); });
-$('#margin').addEventListener('input', e => { draft.slope.margin = +e.target.value || 0; draftChanged(); });
-$('#header').addEventListener('input', e => { draft.slope.header = e.target.value === '' ? null : +e.target.value; draftChanged(); });
+$('#margin').addEventListener('input', e => { draft.slope.margin = smallFromDisp(+e.target.value || 0); draftChanged(); });
+$('#header').addEventListener('input', e => { draft.slope.header = e.target.value === '' ? null : lenFromDisp(+e.target.value); draftChanged(); });
 for (const id of ['#margin', '#header']) $(id).addEventListener('keydown', e => { if (e.key === 'Enter') applyDraft('slope'); });
 $('#slope-apply').addEventListener('click', () => applyDraft('slope'));
 $('#slope-undo').addEventListener('click', () => undo('slope'));
-function fillSlopeStatic() { $('#margin').value = draft.slope.margin; $('#header').value = draft.slope.header ?? ''; }
+function fillSlopeStatic() {
+  $('#margin').value = smallToDisp(draft.slope.margin); $('#header').value = draft.slope.header == null ? '' : lenToDisp(draft.slope.header);
+  $('#door-x').value = lenToDisp(draft.slope.doorX || 0); $('#door-x-field').hidden = draft.slope.doorAt !== 'custom';
+}
+$('#door-x').addEventListener('input', e => { draft.slope.doorX = lenFromDisp(+e.target.value || 0); draftChanged(); });
+$('#door-x').addEventListener('keydown', e => { if (e.key === 'Enter') applyDraft('slope'); });
 
 // ---------- width inputs (live) ----------
 let rcTimer = null;
 function scheduleRecompute() { clearTimeout(rcTimer); rcTimer = setTimeout(() => recompute(), 120); }
-$('#ramp-w').addEventListener('input', e => { state.width.ramp = +e.target.value || 0; scheduleRecompute(); });
-$('#door-w').addEventListener('input', e => { state.width.door = e.target.value === '' ? 0 : +e.target.value; scheduleRecompute(); });
+$('#ramp-w').addEventListener('input', e => { state.width.ramp = lenFromDisp(+e.target.value || 0); scheduleRecompute(); });
+$('#door-w').addEventListener('input', e => { state.width.door = e.target.value === '' ? 0 : lenFromDisp(+e.target.value); scheduleRecompute(); });
 $('#fold').addEventListener('change', e => { state.width.fold = e.target.checked; recompute(); });
 $('#phi').addEventListener('input', e => { state.width.phi = +e.target.value; $('#phi-out').textContent = state.width.phi + '°'; scheduleRecompute(); });
+
+function fillWidthStatic() { $('#ramp-w').value = state.width.ramp ? lenToDisp(state.width.ramp) : ''; $('#door-w').value = state.width.door ? lenToDisp(state.width.door) : ''; }
 
 // ---------- toggles ----------
 const TOGGLES = [
   { ids: [['m-surface', 'surface'], ['m-horiz', 'horizontal']], get: () => draft.slope.measure, set: v => { draft.slope.measure = v; updateSegCalcs(); draftChanged(); } },
+  { ids: [['door-top', 'top'], ['door-bottom', 'bottom'], ['door-custom', 'custom']], get: () => draft.slope.doorAt, set: v => { draft.slope.doorAt = v; $('#door-x-field').hidden = v !== 'custom'; draftChanged(); } },
   { ids: [['dir-fwd', 'fwd'], ['dir-rev', 'rev']], get: () => state.drive, set: v => { state.drive = v; recompute(); } },
   { ids: [['sides-walls', 'walls'], ['sides-curbs', 'curbs']], get: () => state.width.sides, set: v => { state.width.sides = v; recompute(); } },
   { ids: [['zoom-whole', 'whole'], ['zoom-car', 'car'], ['zoom-close', 'close']], get: () => state.view.zoom, set: v => { state.view.zoom = v; save(); draw(); } },
   { ids: [['vx-1', 1], ['vx-2', 2]], get: () => state.view.vx, set: v => { state.view.vx = v; save(); draw(); } },
+  { ids: [['u-metric', 'metric'], ['u-imperial', 'imperial']], get: () => state.units, set: v => { state.units = v; units = v; save(); fillSlopeStatic(); fillWidthStatic(); retranslate(); } },
   { ids: [['lang-en', 'en'], ['lang-hu', 'hu']], get: () => state.lang, set: v => { state.lang = v; lang = v; save(); retranslate(); } },
   { ids: [['th-auto', 'auto'], ['th-light', 'light'], ['th-dark', 'dark']], get: () => state.theme, set: v => { state.theme = v; save(); applyTheme(); draw(); } },
 ];
@@ -1251,24 +1381,69 @@ chartEl.addEventListener('pointerdown', e => { chartDrag = true; chartEl.setPoin
 chartEl.addEventListener('pointermove', e => { if (chartDrag) chartMove(e); });
 chartEl.addEventListener('pointerup', () => { chartDrag = false; });
 
+// ---------- feedback & thanks (public site only; keys come from window.BELLY_CONFIG) ----------
+const CFG = window.BELLY_CONFIG || {};
+let thanked = false, fbMsg = null;
+try { thanked = localStorage.getItem('bellycheck.thanked') === '1'; } catch (e) {}
+const gcEvent = (path, title) => { try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path, title, event: true }); } catch (e) {} };
+function setupFeedback() {
+  const hasForm = !!CFG.web3forms, hasThanks = !!CFG.goatcounter;
+  $('#feedback-row').hidden = !(hasForm || hasThanks);
+  $('#fb').hidden = !hasForm; $('#thanks').hidden = !hasThanks;
+}
+function updateThanks() { $('#thanks').disabled = thanked; $('#thanks-lbl').textContent = t(thanked ? 'thanked' : 'thanks'); }
+function showFb(k, err) { fbMsg = k ? { k, err } : null; const el = $('#fb-status'); el.textContent = k ? t(k) : ''; el.style.color = err ? 'var(--stop)' : ''; }
+$('#thanks').addEventListener('click', () => {
+  gcEvent('thanks', 'Thanks button');
+  thanked = true; try { localStorage.setItem('bellycheck.thanked', '1'); } catch (e) {}
+  updateThanks();
+});
+function settingsSummary() {
+  const c = state.car, sl = state.slope, u = { grade: '%', angle: '°', rise: 'm' };
+  return `${c.name} | L ${c.L} WB ${c.WB} fo ${c.fo} H ${c.H} gc ${c.gc} hF ${c.hF} hR ${c.hR} tyre ${c.tyre} | ${sl.measure}: ` +
+    sl.segs.map(x => `${x.len} m @ ${x.val}${u[x.mode]}`).join(', ') +
+    ` | margin ${sl.margin} cm, header ${sl.header ?? '-'} m, door ${sl.doorAt}${sl.doorAt === 'custom' ? ' ' + sl.doorX + ' m' : ''} | ${state.drive}` +
+    ` | ramp ${state.width.ramp} m, door ${state.width.door} m, ${state.width.sides}, phi ${state.width.phi}` +
+    ` | worst ${(sim.worst.min * 100).toFixed(1)} cm ${sim.worst.zone}`;
+}
+$('#fb-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const msg = $('#fb-msg').value.trim();
+  if (!msg) { showFb('fbEmpty', true); return; }
+  if ($('#fb-bot').checked) return;
+  const btn = $('#fb-send'); btn.disabled = true; showFb('fbSending');
+  const body = { access_key: CFG.web3forms, subject: 'Belly Check feedback', from_name: 'Belly Check', message: msg, language: lang };
+  const email = $('#fb-email').value.trim(); if (email) body.email = email;
+  if ($('#fb-ctx').checked) body.settings = settingsSummary();
+  try {
+    const r = await fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(body) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || !j.success) throw new Error('send failed');
+    showFb('fbSent'); $('#fb-msg').value = ''; $('#fb-email').value = '';
+    gcEvent('feedback-sent', 'Feedback sent');
+  } catch (err) { showFb('fbErr', true); } finally { btn.disabled = false; }
+});
+
 // ---------- translation pass ----------
 function retranslate() {
   document.documentElement.lang = lang;
-  document.querySelectorAll('[data-i]').forEach(el => { el.innerHTML = t(el.dataset.i); });
+  document.querySelectorAll('[data-i]').forEach(el => { el.innerHTML = t(el.dataset.i, lenUnit()); });
+  document.querySelectorAll('[data-u]').forEach(el => { el.textContent = el.dataset.u === 'len' ? lenUnit() : smallUnit(); });
+  document.querySelectorAll('#speed option').forEach(o => { o.textContent = t(o.dataset.i) + ' · ' + fmtSpeed(+o.value); });
   document.querySelectorAll('[data-i-ph]').forEach(el => { el.placeholder = t(el.dataset.iPh); });
   $('#measure-list').innerHTML = T[lang].measure.map(x => `<li>${x}</li>`).join('');
   showLookup(lookupMsg.k, lookupMsg.a, lookupMsg.err);
   renderPresets(); renderCarFields(); renderSegs(); updateApplyBars();
+  updateThanks(); if (fbMsg) showFb(fbMsg.k, fbMsg.err);
   if (sim) { updateKpis(); updateWidth(); draw(); }
 }
 
 // ---------- boot ----------
 applyTheme();
-$('#ramp-w').value = state.width.ramp || '';
-$('#door-w').value = state.width.door || '';
+fillWidthStatic();
 $('#fold').checked = !!state.width.fold;
 $('#phi').value = state.width.phi; $('#phi-out').textContent = state.width.phi + '°';
-fillSlopeStatic(); syncToggles();
+fillSlopeStatic(); syncToggles(); setupFeedback();
 recompute(false);
 retranslate();
 new ResizeObserver(() => draw()).observe($('.layout'));
