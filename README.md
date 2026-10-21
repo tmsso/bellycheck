@@ -34,7 +34,7 @@ Bumper heights in presets are derived from published or typical approach and dep
 ## Limits
 
 - Suspension is rigid. Use the safety margin (default 3 cm) for load and dip.
-- Diagonal driving is modelled along the car's centreline only.
+- Diagonal driving assumes one straight diagonal line across the whole ramp. The width check adds the sideways drift and says the largest angle that fits; the clearance model follows the car's centreline.
 - Preset dimensions are approximate and vary by trim, suspension and wheel size.
 
 ## Site settings
