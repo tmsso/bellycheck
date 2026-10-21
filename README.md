@@ -13,10 +13,14 @@ Will your car scrape on the garage ramp? Belly Check rolls a to-scale car up (or
 
 ## How to use it
 
-1. **Car:** pick a preset, type in your own measurements, or use **Look up**, which opens a web search for the car's dimensions (inside Claude it fills them in directly). A tape-measure guide is built in. Fields marked as estimates are worth measuring if the result is tight.
-2. **Slope:** describe the ramp as pieces from the street to the garage floor. Give each piece a length and one of rise, angle or grade. Lengths can be measured along the surface or horizontally. Add easing pieces at the bottom or top, and use negative values for a ramp down into a basement.
-3. Unapplied edits show straight away as a dashed violet preview in the drawing and the chart. **Apply** them, then press **Play** or drag the slider. The car creeps along and can stop at the first contact. Undo steps back through earlier versions.
-4. **Width & door:** set the ramp and door widths, and try driving diagonally across the slope to soften the transitions.
+Inputs come in three numbered steps.
+
+1. **Your car:** pick a preset, type in your own measurements, or use **Look up**, which opens a web search for the car's dimensions (inside Claude it fills them in directly). A tape-measure guide is built in. Fields marked as estimates are worth measuring if the result is tight.
+2. **Your ramp:** describe the ramp as pieces from the street to the garage floor. Give each piece a length and one of rise, angle or grade. Lengths can be measured along the surface or horizontally. Add easing pieces at the bottom or top, and use negative values for a ramp down into a basement.
+Unapplied edits to the car or ramp show straight away as a dashed violet preview in the drawing and the chart. Press **Update result** to make them the main result, then **Play** or drag the slider. The car creeps along and can stop at the first contact. Undo steps back through earlier versions.
+3. **Door and width:** set the ramp and door widths, and try driving diagonally across the slope to soften the transitions.
+
+**Copy link to this setup** puts your car and ramp into a link you can send; opening it loads the same setup. On a phone, the result stays pinned to the bottom of the screen while you scroll.
 
 The page works in English and Hungarian, in metric or imperial units (US visitors start in imperial, based on their time zone), with light and dark themes. Your settings are saved in the browser.
 
@@ -34,7 +38,9 @@ Bumper heights in presets are derived from published or typical approach and dep
 
 ## Site settings
 
-`config.js` holds two optional keys, both public by design:
+`config.js` holds optional settings, all public by design:
+
+- `siteUrl`: the public address. Turns on **Copy link to this setup**.
 
 - `goatcounter`: a [GoatCounter](https://www.goatcounter.com) site code. Turns on cookie-free visit stats and the **Say thanks** button, which is counted as a `thanks` event.
 - `web3forms`: a [Web3Forms](https://web3forms.com) access key. Turns on the collapsed **Feedback** form, whose messages arrive by email without exposing the address.
