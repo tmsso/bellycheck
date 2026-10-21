@@ -274,6 +274,7 @@ details.panel.about { display: block; }
 .chips-toggle { display: none; }
 .db-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .db-row select { width: 100%; }
+.type-field select { width: 100%; }
 .db-foot { display: flex; justify-content: space-between; align-items: center; gap: 4px 12px; flex-wrap: wrap; }
 .linkbtn { background: none; border: 0; padding: 0; min-height: 32px; color: var(--accent); font: 500 13px var(--font-body); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
 .attrib { margin: 0; font-size: 12px; color: var(--muted); }
@@ -466,6 +467,7 @@ details.about[open] > summary { margin-bottom: 10px; }
           <select id="preset"></select>
         </div>
         <div class="source verbose" id="car-source"></div>
+        <label class="field type-field"><span data-i="typeL">Body style</span><select id="car-type"></select></label>
         <div class="fields" id="car-fields"></div>
         <details class="more-dims" id="more-dims">
           <summary data-i="moreDims">All 10 dimensions and how to measure them</summary>
@@ -678,6 +680,31 @@ function signedClear(P, x, y) {
 }
 
 // Car geometry. Input in mm, output in m. u measured from the rear axle forward; h = height above level ground.
+// Body styles: side profile from the rear (s = 0) to the front (s = 1), heights as a fraction of the car's height.
+// They change the drawing and the roof outline used for the door-header check; the clearance model stays the same.
+const VTYPES = {
+  hatch:  { top: [[0, .50], [.01, .68], [.035, .88], [.08, .98], [.13, 1], [.5, 1], [.58, .95], [.71, .66], [.93, .59], [.99, .5], [1, .42]], win: [[.035, .67], [.08, .92], [.49, .94], [.66, .66]], posts: [.33], lights: true },
+  sedan:  { top: [[0, .48], [.02, .62], [.17, .66], [.29, .95], [.37, 1], [.56, 1], [.69, .67], [.94, .6], [.99, .5], [1, .42]], win: [[.22, .66], [.33, .93], [.55, .95], [.66, .67]], posts: [.43], lights: true },
+  estate: { top: [[0, .5], [.01, .7], [.03, .93], [.07, 1], [.55, 1], [.67, .67], [.93, .6], [.99, .5], [1, .42]], win: [[.04, .68], [.07, .93], [.53, .94], [.64, .67]], posts: [.22, .41], lights: true },
+  suv:    { top: [[0, .52], [.01, .74], [.035, .96], [.08, 1], [.58, 1], [.71, .74], [.95, .68], [.995, .56], [1, .45]], win: [[.035, .72], [.08, .94], [.56, .95], [.68, .73]], posts: [.25, .44], lights: true },
+  mpv:    { top: [[0, .48], [.005, .8], [.03, .97], [.09, 1], [.62, 1], [.8, .7], [.96, .62], [1, .45]], win: [[.03, .7], [.09, .94], [.6, .95], [.76, .71]], posts: [.27, .46], lights: true },
+  coupe:  { top: [[0, .5], [.03, .64], [.19, .72], [.35, .97], [.43, 1], [.55, 1], [.69, .7], [.95, .58], [1, .44]], win: [[.27, .71], [.39, .94], [.54, .95], [.66, .7]], posts: [], lights: true },
+  pickup: { top: [[0, .5], [0, .63], [.43, .63], [.44, .97], [.47, 1], [.7, 1], [.79, .73], [.97, .68], [1, .5]], win: [[.46, .69], [.48, .94], [.69, .95], [.76, .72]], posts: [.58], lights: true },
+  van:    { top: [[0, .42], [0, .96], [.015, 1], [.8, 1], [.88, .8], [.97, .62], [1, .45]], win: [[.69, .62], [.69, .93], [.79, .94], [.86, .72]], posts: [], lights: true },
+  truck:  { top: [[0, .3], [0, 1], [.74, 1], [.74, .8], [.97, .8], [1, .72], [1, .32]], win: [[.79, .55], [.79, .76], [.95, .76], [.985, .58]], posts: [], lights: false, plain: true },
+  bus:    { top: [[0, .38], [0, .96], [.01, 1], [.99, 1], [1, .96], [1, .38]], win: [[.04, .56], [.04, .88], [.96, .88], [.96, .56]], posts: [.16, .28, .4, .52, .64, .76, .88], lights: false, plain: true },
+};
+function inferType(c, hint) {
+  const H = +c.H || 1500, L = +c.L || 4400, h = String(hint || '').toLowerCase();
+  if (/\bcab\b|pick-?up/.test(h)) return 'pickup';
+  if (H >= 2400) return L >= 8000 ? 'bus' : 'truck';
+  if (H >= 1850) return 'van';
+  if (H >= 1580) return 'suv';
+  if (/coupe|cabrio|convertible|roadster|spider|spyder/.test(h)) return 'coupe';
+  if (/wagon|estate|touring|combi|kombi|variant|avant|sports ?tourer/.test(h)) return 'estate';
+  if (/sedan|saloon|limousine/.test(h)) return 'sedan';
+  return L < 4450 ? 'hatch' : 'sedan';
+}
 function carGeom(c) {
   const m = k => (+c[k] || 0) / 1000;
   const L = m('L'), WB = m('WB'), fo = m('fo'), H = m('H'), W = m('W'), Wm = m('Wm'), gc = m('gc'), hF = m('hF'), hR = m('hR');
@@ -686,7 +713,8 @@ function carGeom(c) {
   const b1 = Math.min(0.9 * r, WB / 2), b2 = Math.max(WB - 0.9 * r, WB / 2);
   const under = [[-ro, hR], [b1, gc], [b2, gc], [WB + fo, hF]];
   const S = s => -ro + s * L;
-  const top = [[S(0), 0.6 * H], [S(0.03), 0.71 * H], [S(0.2), 0.93 * H], [S(0.28), H], [S(0.6), H], [S(0.76), 0.68 * H], [S(0.95), 0.6 * H], [S(1), 0.5 * H]];
+  const vt = VTYPES[c.type] || VTYPES[inferType(c, c.name)];
+  const top = vt.top.map(([sf, zf]) => [S(sf), zf * H]);
   const samples = [];
   for (let u = -ro; u <= WB + fo + 1e-9; u += 0.02) {
     let h;
@@ -698,7 +726,16 @@ function carGeom(c) {
   // coarse set for the sweep: every 3rd sample plus the polyline corners (where minima sit)
   const coarse = samples.filter((_, i) => i % 3 === 0);
   for (const [u, h] of under) coarse.push({ u, h, zone: u < 0 ? 'rear' : u > WB ? 'front' : 'belly' });
-  return { L, WB, fo, ro, H, W, Wm, gc, hF, hR, r, under, top, samples, coarse };
+  return { L, WB, fo, ro, H, W, Wm, gc, hF, hR, r, under, top, samples, coarse, vt, S };
+}
+// Full side outline for drawing: roof profile, faces, then the underside with arches over both wheels.
+function carOutline(g) {
+  const out = [[-g.ro, g.hR], ...g.top, [g.WB + g.fo, g.hF]];
+  const ra = g.r * 1.12, sill = Math.min(Math.max(g.gc, 0.03), g.r * 0.95);
+  const arch = c => { for (let i = 0; i <= 14; i++) { const a = i / 14 * Math.PI; out.push([c + ra * Math.cos(a), g.r + ra * Math.sin(a) * 0.98]); } };
+  out.push([g.WB + ra, Math.min(g.hF, g.r)]); arch(g.WB); out.push([g.WB - ra, sill]);
+  out.push([ra, sill]); out.push([ra, g.r]); arch(0); out.push([-ra, Math.min(g.hR, g.r)]);
+  return out;
 }
 
 function makeSim(car, slope, phi) {
@@ -810,6 +847,7 @@ const T = {
     srcDb: (n, gcNote) => `<b>${n}</b> · from the open vehicle-makes-models list (data from autoevolution.com). It can be wrong or describe a different trim, so check the numbers that matter. Dashed fields are estimates.${gcNote}`,
     gcLowest: ' Ground clearance differs between versions; this is the lowest listed.',
     attrib: 'Car list: <a href="https://github.com/gor3a/vehicle-makes-models" target="_blank" rel="noopener">vehicle-makes-models</a>, data from autoevolution.com, under the ODbL 1.0 licence.',
+    typeL: 'Body style', vt_hatch: 'Hatchback', vt_sedan: 'Saloon / sedan', vt_estate: 'Estate', vt_suv: 'SUV', vt_mpv: 'MPV', vt_coupe: 'Coupé', vt_pickup: 'Pickup', vt_van: 'Van', vt_truck: 'Lorry', vt_bus: 'Bus',
     step1: 'Pick your car', step2: 'Measure your ramp', step3: 'Roll it in', details: 'Details',
     share: 'Copy link to this setup', shareDone: 'Link copied', shareSelect: 'Copy the link below',
     rGo: c => `Clears with ${c} to spare`, rTight: c => `Tight: only ${c} to spare`, rScrape: z => `Won’t fit: the ${z} scrapes`,
@@ -917,6 +955,7 @@ const T = {
     srcDb: (n, gcNote) => `<b>${n}</b> · a nyílt vehicle-makes-models listából (forrás: autoevolution.com). Tévedhet, vagy más felszereltségre vonatkozhat, ezért a fontos méreteket ellenőrizd. A szaggatott mezők becslések.${gcNote}`,
     gcLowest: ' A hasmagasság változatonként eltér; ez a legalacsonyabb listázott érték.',
     attrib: 'Autólista: <a href="https://github.com/gor3a/vehicle-makes-models" target="_blank" rel="noopener">vehicle-makes-models</a>, forrás: autoevolution.com, ODbL 1.0 licenc alatt.',
+    typeL: 'Karosszéria', vt_hatch: 'Ferdehátú', vt_sedan: 'Szedán', vt_estate: 'Kombi', vt_suv: 'SUV', vt_mpv: 'Egyterű', vt_coupe: 'Kupé', vt_pickup: 'Pickup', vt_van: 'Kisteherautó', vt_truck: 'Teherautó', vt_bus: 'Busz',
     step1: 'Válaszd ki az autót', step2: 'Mérd le a rámpát', step3: 'Gurítsd be', details: 'Részletek',
     share: 'Link másolása ehhez a beállításhoz', shareDone: 'Link másolva', shareSelect: 'Másold ki a lenti linket',
     rGo: c => `Átfér, ${c} tartalékkal`, rTight: c => `Szoros: csak ${c} tartalék`, rScrape: z => `Nem fér át: fennakad (${z})`,
@@ -1043,21 +1082,21 @@ const zone = z => t('zone_' + z);
 
 // ---------- data ----------
 const PRESETS = {
-  golf8:   { name: 'Volkswagen Golf 8 (2020–)', L: 4284, WB: 2636, fo: 880, H: 1456, W: 1789, Wm: 2073, gc: 135, tyre: 632, ap: 15, dp: 18, est: ['fo', 'gc', 'Wm'] },
-  octavia4:{ name: 'Škoda Octavia IV liftback (2020–)', L: 4689, WB: 2686, fo: 925, H: 1470, W: 1829, Wm: 2003, gc: 136, tyre: 632, ap: 14, dp: 14, est: ['fo', 'gc', 'Wm'] },
-  cmax14:  { name: 'Ford C-Max Mk2 (2014)', L: 4380, WB: 2648, fo: 925, H: 1626, W: 1828, Wm: 2067, gc: 140, tyre: 632, ap: 14, dp: 17, est: ['fo', 'gc', 'Wm'], note: '205/55 R16' },
-  karoq:   { name: 'Škoda Karoq (2022– facelift)', L: 4390, WB: 2638, fo: 880, H: 1603, W: 1841, Wm: 2025, gc: 161, tyre: 685, ap: 18.4, dp: 18.7, est: ['fo'], note: '225/45 R19, FWD' },
-  kodiaq2: { name: 'Škoda Kodiaq II (2024–)', L: 4758, WB: 2791, fo: 927, H: 1679, W: 1864, Wm: 2133, gc: 189, tyre: 716, ap: 19, dp: 18, est: [], note: '235/55 R18' },
-  rav4h26: { name: 'Toyota RAV4 Hybrid (2026–)', L: 4600, WB: 2690, fo: 925, H: 1680, W: 1855, Wm: 2120, gc: 190, tyre: 727, ap: 18, dp: 21, est: ['fo', 'Wm', 'gc', 'tyre'], note: '225/60 R18' },
-  rav4h19: { name: 'Toyota RAV4 Hybrid XA50 (2019–25)', L: 4600, WB: 2690, fo: 925, H: 1685, W: 1855, Wm: 2120, gc: 190, tyre: 724, ap: 19, dp: 21, est: ['fo', 'Wm'] },
-  e213:    { name: 'Mercedes-Benz E-Class W213 (2016–23)', L: 4923, WB: 2939, fo: 865, H: 1468, W: 1852, Wm: 2065, gc: 115, tyre: 678, ap: 12.5, dp: 15, est: ['fo', 'gc', 'Wm'] },
-  model3:  { name: 'Tesla Model 3 (2017–23)', L: 4694, WB: 2875, fo: 850, H: 1443, W: 1849, Wm: 2088, gc: 140, tyre: 669, ap: 12.5, dp: 15, est: ['fo', 'gc'] },
-  duster2: { name: 'Dacia Duster II (2018–24)', L: 4341, WB: 2676, fo: 822, H: 1693, W: 1804, Wm: 2052, gc: 210, tyre: 686, ap: 30, dp: 33, est: ['fo', 'Wm'] },
+  golf8:   { type: 'hatch', name: 'Volkswagen Golf 8 (2020–)', L: 4284, WB: 2636, fo: 880, H: 1456, W: 1789, Wm: 2073, gc: 135, tyre: 632, ap: 15, dp: 18, est: ['fo', 'gc', 'Wm'] },
+  octavia4:{ type: 'sedan', name: 'Škoda Octavia IV liftback (2020–)', L: 4689, WB: 2686, fo: 925, H: 1470, W: 1829, Wm: 2003, gc: 136, tyre: 632, ap: 14, dp: 14, est: ['fo', 'gc', 'Wm'] },
+  cmax14:  { type: 'mpv', name: 'Ford C-Max Mk2 (2014)', L: 4380, WB: 2648, fo: 925, H: 1626, W: 1828, Wm: 2067, gc: 140, tyre: 632, ap: 14, dp: 17, est: ['fo', 'gc', 'Wm'], note: '205/55 R16' },
+  karoq:   { type: 'suv', name: 'Škoda Karoq (2022– facelift)', L: 4390, WB: 2638, fo: 880, H: 1603, W: 1841, Wm: 2025, gc: 161, tyre: 685, ap: 18.4, dp: 18.7, est: ['fo'], note: '225/45 R19, FWD' },
+  kodiaq2: { type: 'suv', name: 'Škoda Kodiaq II (2024–)', L: 4758, WB: 2791, fo: 927, H: 1679, W: 1864, Wm: 2133, gc: 189, tyre: 716, ap: 19, dp: 18, est: [], note: '235/55 R18' },
+  rav4h26: { type: 'suv', name: 'Toyota RAV4 Hybrid (2026–)', L: 4600, WB: 2690, fo: 925, H: 1680, W: 1855, Wm: 2120, gc: 190, tyre: 727, ap: 18, dp: 21, est: ['fo', 'Wm', 'gc', 'tyre'], note: '225/60 R18' },
+  rav4h19: { type: 'suv', name: 'Toyota RAV4 Hybrid XA50 (2019–25)', L: 4600, WB: 2690, fo: 925, H: 1685, W: 1855, Wm: 2120, gc: 190, tyre: 724, ap: 19, dp: 21, est: ['fo', 'Wm'] },
+  e213:    { type: 'sedan', name: 'Mercedes-Benz E-Class W213 (2016–23)', L: 4923, WB: 2939, fo: 865, H: 1468, W: 1852, Wm: 2065, gc: 115, tyre: 678, ap: 12.5, dp: 15, est: ['fo', 'gc', 'Wm'] },
+  model3:  { type: 'sedan', name: 'Tesla Model 3 (2017–23)', L: 4694, WB: 2875, fo: 850, H: 1443, W: 1849, Wm: 2088, gc: 140, tyre: 669, ap: 12.5, dp: 15, est: ['fo', 'gc'] },
+  duster2: { type: 'suv', name: 'Dacia Duster II (2018–24)', L: 4341, WB: 2676, fo: 822, H: 1693, W: 1804, Wm: 2052, gc: 210, tyre: 686, ap: 30, dp: 33, est: ['fo', 'Wm'] },
 };
 function presetCar(key) {
   const p = PRESETS[key];
   const ro = p.L - p.WB - p.fo;
-  return { name: p.name, L: p.L, WB: p.WB, fo: p.fo, H: p.H, W: p.W, Wm: p.Wm, gc: p.gc, tyre: p.tyre,
+  return { type: p.type, name: p.name, L: p.L, WB: p.WB, fo: p.fo, H: p.H, W: p.W, Wm: p.Wm, gc: p.gc, tyre: p.tyre,
     hF: bumperFromAngle(p.fo, p.tyre, p.ap), hR: bumperFromAngle(ro, p.tyre, p.dp),
     src: 'preset', note: p.note || '', est: [...new Set([...p.est, 'hF', 'hR'])], edited: false };
 }
@@ -1087,6 +1126,7 @@ if (!state.lang) state.lang = DEFAULT.lang;
 if (!state.theme) state.theme = 'auto';
 if (!state.units) state.units = detectUnits();
 units = state.units;
+if (!state.car.type) state.car.type = inferType(state.car, state.car.name);
 if (!state.slope.doorAt) state.slope.doorAt = 'top';
 if (state.slope.doorX == null) state.slope.doorX = 0;
 lang = state.lang;
@@ -1094,7 +1134,7 @@ function save() { try { localStorage.setItem('rampcheck.v2', JSON.stringify(stat
 
 // ---------- shareable setup links (#s=...) ----------
 function encodeState() {
-  const c = {}; for (const k of [...FIELD_KEYS, 'name', 'src', 'note', 'est', 'edited']) if (state.car[k] != null) c[k] = state.car[k];
+  const c = {}; for (const k of [...FIELD_KEYS, 'name', 'src', 'note', 'est', 'edited', 'type']) if (state.car[k] != null) c[k] = state.car[k];
   const json = JSON.stringify({ v: 1, c, s: state.slope, d: state.drive, w: state.width });
   return btoa(unescape(encodeURIComponent(json))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
@@ -1105,6 +1145,7 @@ function decodeState(str) {
     const car = { name: String(o.c.name || 'Shared car').slice(0, 120), src: ['preset', 'claude', 'manual', 'db'].includes(o.c.src) ? o.c.src : 'manual',
       note: String(o.c.note || '').slice(0, 120), est: Array.isArray(o.c.est) ? o.c.est.filter(k => FIELD_KEYS.includes(k)) : [], edited: !!o.c.edited };
     for (const k of FIELD_KEYS) { const v = +o.c[k]; if (!(v > 0 && v < 20000)) return null; car[k] = v; }
+    car.type = VTYPES[o.c.type] ? o.c.type : inferType(car, car.name);
     const segs = o.s.segs.slice(0, 20).map(x => ({ len: Math.max(0, +x.len || 0), mode: ['rise', 'angle', 'grade'].includes(x.mode) ? x.mode : 'grade', val: +x.val || 0 }));
     const sl = Object.assign({}, DEFAULT.slope, { measure: o.s.measure === 'horizontal' ? 'horizontal' : 'surface', segs, margin: Math.max(0, +o.s.margin || 0),
       header: o.s.header == null ? null : Math.max(0, +o.s.header || 0), doorAt: ['top', 'bottom', 'custom'].includes(o.s.doorAt) ? o.s.doorAt : 'top', doorX: Math.max(0, +o.s.doorX || 0) });
@@ -1358,27 +1399,14 @@ function drawSide(col) {
     ctx.strokeStyle = c < 0 ? col.stop : c < margin ? col.warn : col.rule; ctx.lineWidth = c < margin ? 2 : 1;
     ctx.beginPath(); ctx.moveTo(X(x), Y(y)); ctx.lineTo(X(x), Y(groundY(P, x))); ctx.stroke();
   });
-  const body = [];
-  for (const [u, hh] of g.top) body.push(p.w(u, hh));
-  for (let i = g.under.length - 1; i >= 0; i--) body.push(p.w(g.under[i][0], g.under[i][1]));
-  ctx.beginPath(); body.forEach(([x, y], i) => i ? ctx.lineTo(X(x), Y(y)) : ctx.moveTo(X(x), Y(y))); ctx.closePath();
-  ctx.fillStyle = col.car; ctx.fill(); ctx.strokeStyle = col.accent; ctx.lineWidth = 1.6; ctx.stroke();
-  const win = [[0.08, 0.72], [0.22, 0.9], [0.3, 0.95], [0.58, 0.95], [0.72, 0.72]].map(([sf, hf]) => p.w(-g.ro + sf * g.L, hf * g.H));
-  ctx.beginPath(); win.forEach(([x, y], i) => i ? ctx.lineTo(X(x), Y(y)) : ctx.moveTo(X(x), Y(y))); ctx.closePath();
-  ctx.strokeStyle = col.accent; ctx.lineWidth = 1; ctx.globalAlpha = 0.6; ctx.stroke(); ctx.globalAlpha = 1;
-  for (const [x, y] of [[p.xt, p.yt], [p.xl, p.yl]]) {
-    ctx.beginPath(); ctx.ellipse(X(x), Y(y), g.r * s, g.r * s * vx, 0, 0, Math.PI * 2); ctx.fillStyle = col.tyre; ctx.fill();
-    ctx.beginPath(); ctx.ellipse(X(x), Y(y), g.r * s * 0.55, g.r * s * 0.55 * vx, 0, 0, Math.PI * 2); ctx.fillStyle = col.muted; ctx.fill();
-  }
+  drawCarBody(ctx, g, p, X, Y, s, vx, col);
   if (preview) {
     const pv = preview, dx = pv.dx, ppos = Math.max(pv.xs, Math.min(pv.xe, pos - dx));
     const pe = pv.evalAt(ppos), pp = pe.pose, pgm = pv.g;
     ctx.save(); ctx.strokeStyle = col.preview; ctx.fillStyle = col.preview; ctx.setLineDash([6, 4]); ctx.lineWidth = 2;
     ctx.beginPath(); pv.P.forEach(([x, y], i) => i ? ctx.lineTo(X(x + dx), Y(y)) : ctx.moveTo(X(x + dx), Y(y))); ctx.stroke();
     if (pv.header) { const hx = X(pv.header.x + dx), hy = Y(pv.header.y); ctx.lineWidth = 1.5; ctx.strokeRect(hx - 6, -2, 18, Math.max(0, hy) + 2); }
-    const pbody = [];
-    for (const [u, hh] of pgm.top) pbody.push(pp.w(u, hh));
-    for (let i = pgm.under.length - 1; i >= 0; i--) pbody.push(pp.w(pgm.under[i][0], pgm.under[i][1]));
+    const pbody = carOutline(pgm).map(([u, hh]) => pp.w(u, hh));
     ctx.beginPath(); pbody.forEach(([x, y], i) => i ? ctx.lineTo(X(x + dx), Y(y)) : ctx.moveTo(X(x + dx), Y(y))); ctx.closePath();
     ctx.globalAlpha = 0.08; ctx.fill(); ctx.globalAlpha = 1; ctx.lineWidth = 1.8; ctx.stroke();
     for (const [x, y] of [[pp.xt, pp.yt], [pp.xl, pp.yl]]) { ctx.beginPath(); ctx.ellipse(X(x + dx), Y(y), pgm.r * s, pgm.r * s * vx, 0, 0, Math.PI * 2); ctx.stroke(); }
@@ -1407,6 +1435,39 @@ function drawSide(col) {
   ctx.fillStyle = col.ink; ctx.fillText(sbl, 16 + barM * s, 18);
 }
 
+function drawCarBody(ctx, g, p, X, Y, s, vx, col) {
+  const path = pts => { ctx.beginPath(); pts.forEach(([u, hh], i) => { const [x, y] = p.w(u, hh); i ? ctx.lineTo(X(x), Y(y)) : ctx.moveTo(X(x), Y(y)); }); ctx.closePath(); };
+  const at = (sf, zf) => [g.S(sf), zf * g.H];
+  // body
+  path(carOutline(g)); ctx.fillStyle = col.car; ctx.fill();
+  ctx.lineJoin = 'round'; ctx.strokeStyle = col.accent; ctx.lineWidth = 1.6; ctx.stroke();
+  // glass and pillars
+  const vt = g.vt, wz = vt.win.map(q => q[1]), z0 = Math.min(...wz), z1 = Math.max(...wz);
+  path(vt.win.map(([sf, zf]) => at(sf, zf)));
+  ctx.save(); ctx.fillStyle = col.accent; ctx.globalAlpha = 0.22; ctx.fill(); ctx.globalAlpha = 0.7; ctx.lineWidth = 1; ctx.stroke(); ctx.restore();
+  ctx.save(); ctx.clip(); ctx.strokeStyle = col.car; ctx.lineWidth = Math.max(2, g.L * s * 0.012);
+  for (const sf of vt.posts) { const a = p.w(g.S(sf), z0 * g.H), b = p.w(g.S(sf), z1 * g.H); ctx.beginPath(); ctx.moveTo(X(a[0]), Y(a[1])); ctx.lineTo(X(b[0]), Y(b[1])); ctx.stroke(); }
+  ctx.restore();
+  // shoulder line and lights, kept inside the body
+  ctx.save(); path(carOutline(g)); ctx.clip();
+  if (!vt.plain) {
+    ctx.save(); ctx.strokeStyle = col.accent; ctx.globalAlpha = 0.35; ctx.lineWidth = 1;
+    const sh = (z0 - 0.06) * g.H, a = p.w(g.S(0.01), sh), b = p.w(g.S(0.99), sh);
+    ctx.beginPath(); ctx.moveTo(X(a[0]), Y(a[1])); ctx.lineTo(X(b[0]), Y(b[1])); ctx.stroke(); ctx.restore();
+  }
+  if (vt.lights) {
+    const zAt = sf => { const tp = vt.top; for (let i = 1; i < tp.length; i++) if (tp[i][0] >= sf) { const [a0, b0] = tp[i - 1], [a1, b1] = tp[i]; return a1 > a0 ? b0 + (b1 - b0) * (sf - a0) / (a1 - a0) : Math.min(b0, b1); } return tp[tp.length - 1][1]; };
+    const lamp = (sf, color) => { const [x, y] = p.w(g.S(sf), (Math.min(zAt(sf), 0.62) - 0.06) * g.H); ctx.beginPath(); ctx.ellipse(X(x), Y(y), Math.max(2.5, g.L * s * 0.014), Math.max(1.5, g.H * s * vx * 0.025), 0, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill(); };
+    lamp(0.012, col.stop); lamp(0.985, col.warn);
+  }
+  ctx.restore();
+  // wheels: tyre, rim, hub
+  for (const [x, y] of [[p.xt, p.yt], [p.xl, p.yl]]) {
+    ctx.beginPath(); ctx.ellipse(X(x), Y(y), g.r * s, g.r * s * vx, 0, 0, Math.PI * 2); ctx.fillStyle = col.tyre; ctx.fill();
+    ctx.beginPath(); ctx.ellipse(X(x), Y(y), g.r * s * 0.62, g.r * s * 0.62 * vx, 0, 0, Math.PI * 2); ctx.fillStyle = col.muted; ctx.fill();
+    ctx.beginPath(); ctx.ellipse(X(x), Y(y), g.r * s * 0.2, g.r * s * 0.2 * vx, 0, 0, Math.PI * 2); ctx.fillStyle = col.tyre; ctx.fill();
+  }
+}
 function drawChart(col) {
   const c = $('#chart');
   const { ctx, w, h } = fitCanvas(c, 170);
@@ -1530,8 +1591,10 @@ function renderCarFields() {
   };
   $('#car-fields').innerHTML = KEY.map(field).join('');
   $('#car-fields-more').innerHTML = FIELD_KEYS.filter(k => !KEY.includes(k)).map(field).join('');
+  $('#car-type').innerHTML = Object.keys(VTYPES).map(k => `<option value="${k}"${(car.type || inferType(car, car.name)) === k ? ' selected' : ''}>${esc(t('vt_' + k))}</option>`).join('');
   renderCarSource();
 }
+$('#car-type').addEventListener('change', e => { draft.car.type = e.target.value; draftChanged(); });
 function renderCarSource() {
   const car = draft.car, name = esc((car.name || t('yourCar')) + (car.edited ? t('edited') : ''));
   $('#car-source').innerHTML = car.src === 'claude' && !car.edited ? t('srcClaude', name, esc(car.notes || '')) : car.src === 'preset' && !car.edited ? t('srcPreset', name, esc(car.note || ''))
@@ -1608,7 +1671,7 @@ function pickDbCar() {
   if (!W) est.push('W'); if (!H) est.push('H'); if (!gc) est.push('gc'); if (!ty) est.push('tyre');
   car.Wm = car.W + 220;
   car.hF = bumperFromAngle(car.fo, car.tyre, 15); car.hR = bumperFromAngle(L - WB - car.fo, car.tyre, 17);
-  car.est = est;
+  car.est = est; car.type = inferType(car, r[3] + ' ' + mo[0]);
   draft.car = car; applyDraft('car');
   gcEvent('db-pick', mk[0] + ' ' + mo[0]);
 }
@@ -1652,7 +1715,7 @@ Reply with only this JSON object:
     const ty = tyreFromSize(d.tyre_size); car.tyre = ty || 650; if (!ty) car.est.push('tyre');
     car.hF = bumperFromAngle(car.fo, car.tyre, n(d.approach_angle) || 15);
     car.hR = bumperFromAngle(car.L - car.WB - car.fo, car.tyre, n(d.departure_angle) || 17);
-    car.est = [...new Set([...car.est, 'hF', 'hR'])];
+    car.est = [...new Set([...car.est, 'hF', 'hR'])]; car.type = inferType(car, car.name);
     draft.car = car; applyDraft('car');
     showLookup('lkDone', [car.name, !!n(d.approach_angle)]);
   } catch (e) {

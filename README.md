@@ -15,7 +15,7 @@ Will your car scrape on the garage ramp? Belly Check rolls a to-scale car up (or
 
 Inputs come in three numbered steps.
 
-1. **Your car:** pick make, model and generation from the car list, start from a preset, type in your own measurements, or use **Look up**, which opens a web search for the car's dimensions (inside Claude it fills them in directly). A tape-measure guide is built in. Fields marked as estimates are worth measuring if the result is tight.
+1. **Your car:** pick make, model and generation from the car list, start from a preset, type in your own measurements, or use **Look up**, which opens a web search for the car's dimensions (inside Claude it fills them in directly). A tape-measure guide is built in. **Body style** (hatchback, saloon, estate, SUV, MPV, coupé, pickup, van, lorry, bus) only changes how the vehicle is drawn and the roof outline used for the door-header check; the clearance measurements stay the same. Fields marked as estimates are worth measuring if the result is tight.
 2. **Your ramp:** describe the ramp as pieces from the street to the garage floor. Give each piece a length and one of rise, angle or grade. Lengths can be measured along the surface or horizontally. Add easing pieces at the bottom or top, and use negative values for a ramp down into a basement. You can also drag the ramp's corners in the profile drawing.
 3. **Door and width:** set the ramp and door widths, and try driving diagonally across the slope to soften the transitions.
 
